@@ -105,8 +105,8 @@ public class AnimationAndMovementController : MonoBehaviour
         if(hit!= null){
             Rigidbody rigidbody = hit.collider.attachedRigidbody;
             if(rigidbody != null && isPushPressed && !isPickUp){
-                Debug.Log(rigidbody.name);
-                if(rigidbody.name == "Sphere"){
+                // Debug.Log(rigidbody.name);
+                // if(rigidbody.name == "Sphere"){
                     sphere = rigidbody;
                     isPickUp = true;
 
@@ -138,7 +138,7 @@ public class AnimationAndMovementController : MonoBehaviour
 
                     // Debug.Log(transform.position);
                     
-                }
+                // }
             }
         }
     }
