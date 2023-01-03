@@ -21,10 +21,13 @@ public class AnimationAndMovementController : MonoBehaviour
     bool isMovementPressed;
     bool isRunPressed;
     bool isPushPressed;
+    bool isPickUp = false;
 
     float rotationFactorPerFrame = 15.0f;
     float runMultiplier = 5.0f;
     float walkMultiplier = 1.5f;
+
+    Rigidbody sphere = null; 
     
     [SerializeField] private float forceMagnitude = 150.0f;
 
@@ -89,24 +92,29 @@ public class AnimationAndMovementController : MonoBehaviour
         isMovementPressed = currentMovementInput.x != 0 || currentMovementInput.y != 0;
     }
 
-    private void OnControllerColliderHit(ControllerColliderHit hit){
-        Rigidbody rigidbody = hit.collider.attachedRigidbody;
-        // Debug.Log(transform.position);
-        if(rigidbody != null && isPushPressed){
-
-            // rigidbody.drag = 10;
-            // rigidbody.transform.parent = holdArea;
-            // rigidbody.isKinematic = false; 
-            // Vector3 moveDirection = (holdArea.position - rigidbody.transform.position);
-            // rigidbody.AddForce(moveDirection * forceMagnitude);
-
-
-            Vector3 forceDirection = hit.gameObject.transform.position - transform.position;
-            forceDirection.y = 0;
-            forceDirection.Normalize();
-
-            
-            rigidbody.AddForceAtPosition(forceDirection * forceMagnitude, transform.position, ForceMode.Impulse);
+    void Drop(){
+        if(!isPushPressed && isPickUp){
+            sphere.transform.parent = null;
+            sphere.isKinematic = false; 
+            isPickUp = false;
+        }
+    }
+    
+    
+    void OnControllerColliderHit(ControllerColliderHit hit){
+        if(hit!= null){
+            Rigidbody rigidbody = hit.collider.attachedRigidbody;
+            if(rigidbody != null && isPushPressed && !isPickUp){
+                Debug.Log(rigidbody.name);
+                if(rigidbody.name == "Sphere"){
+                    sphere = rigidbody;
+                    isPickUp = true;
+                    rigidbody.transform.parent = holdArea;
+                    rigidbody.isKinematic = true; 
+                    Vector3 moveDirection = (holdArea.position - rigidbody.transform.position);
+                    rigidbody.AddForce(moveDirection * forceMagnitude);
+                }
+            }
         }
     }
 
@@ -162,6 +170,7 @@ public class AnimationAndMovementController : MonoBehaviour
         handleRotation();
         handleAnimation();
         handleGravity();
+        Drop();
         
         if(isRunPressed && !isPushPressed){
             characterController.Move(currentRunMovement * Time.deltaTime);
