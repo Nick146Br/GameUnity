@@ -12,15 +12,23 @@ public class AnimationAndMovementController : MonoBehaviour
 
     int isWalkingHash;
     int isRunningHash;
-
+    int isPushingHash;
     //Variaveis para comparar os valores do input com os valores do player
     Vector2 currentMovementInput;
     Vector3 currentMovement;
     Vector3 currentRunMovement;
+    
     bool isMovementPressed;
     bool isRunPressed;
+    bool isPushPressed;
+
     float rotationFactorPerFrame = 15.0f;
     float runMultiplier = 5.0f;
+    float walkMultiplier = 1.5f;
+    
+    [SerializeField] private float forceMagnitude = 150.0f;
+
+    [SerializeField] Transform holdArea;
 
     void Awake(){
         playerInput = new PlayerInput();
@@ -29,10 +37,15 @@ public class AnimationAndMovementController : MonoBehaviour
 
         isWalkingHash = Animator.StringToHash("isWalking");
         isRunningHash = Animator.StringToHash("isRunning");
+        isPushingHash = Animator.StringToHash("isPushing");
 
         playerInput.CharacterControls.Move.started += onMovementInput;
         playerInput.CharacterControls.Move.canceled += onMovementInput;
         playerInput.CharacterControls.Move.performed += onMovementInput;
+        
+        playerInput.CharacterControls.Push.started += onPush;
+        playerInput.CharacterControls.Push.canceled += onPush;
+        playerInput.CharacterControls.Push.performed += onPush;
 
         playerInput.CharacterControls.Run.started += onRun;
         playerInput.CharacterControls.Run.canceled += onRun;
@@ -41,6 +54,10 @@ public class AnimationAndMovementController : MonoBehaviour
 
     void onRun(InputAction.CallbackContext context){
         isRunPressed = context.ReadValueAsButton();
+    }
+
+    void onPush(InputAction.CallbackContext context){
+        isPushPressed = context.ReadValueAsButton();
     }
 
     void handleRotation(){
@@ -59,11 +76,12 @@ public class AnimationAndMovementController : MonoBehaviour
             transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationFactorPerFrame * Time.deltaTime);
         }
     }
+
     void onMovementInput(InputAction.CallbackContext context){
         currentMovementInput = context.ReadValue<Vector2>();
         
-        currentMovement.x = currentMovementInput.x;
-        currentMovement.z = currentMovementInput.y;
+        currentMovement.x = currentMovementInput.x * walkMultiplier;
+        currentMovement.z = currentMovementInput.y * walkMultiplier;
         
         currentRunMovement.x = currentMovementInput.x * runMultiplier;
         currentRunMovement.z = currentMovementInput.y * runMultiplier;
@@ -71,9 +89,42 @@ public class AnimationAndMovementController : MonoBehaviour
         isMovementPressed = currentMovementInput.x != 0 || currentMovementInput.y != 0;
     }
 
+    private void OnControllerColliderHit(ControllerColliderHit hit){
+        Rigidbody rigidbody = hit.collider.attachedRigidbody;
+        // Debug.Log(transform.position);
+        if(rigidbody != null && isPushPressed){
+
+            // rigidbody.drag = 10;
+            // rigidbody.transform.parent = holdArea;
+            // rigidbody.isKinematic = false; 
+            // Vector3 moveDirection = (holdArea.position - rigidbody.transform.position);
+            // rigidbody.AddForce(moveDirection * forceMagnitude);
+
+
+            Vector3 forceDirection = hit.gameObject.transform.position - transform.position;
+            forceDirection.y = 0;
+            forceDirection.Normalize();
+
+            
+            rigidbody.AddForceAtPosition(forceDirection * forceMagnitude, transform.position, ForceMode.Impulse);
+        }
+    }
+
     void handleAnimation(){
         bool isWalking = animator.GetBool(isWalkingHash);
         bool isRunning = animator.GetBool(isRunningHash);
+        bool isPushing = animator.GetBool(isPushingHash);
+
+        // Setar aqui o colisor aqui - Precisa do colisor pra empurrar algo
+
+        if(isPushPressed && !isPushing){
+            animator.SetBool(isPushingHash, true);
+            animator.SetBool(isRunningHash, false);
+        }
+
+        else if(!isPushPressed && isPushing){
+            animator.SetBool(isPushingHash, false);
+        }
 
         if(isMovementPressed && !isWalking){
             animator.SetBool(isWalkingHash, true);
@@ -83,19 +134,15 @@ public class AnimationAndMovementController : MonoBehaviour
             animator.SetBool(isWalkingHash, false);
         }
         
-        if((isMovementPressed && isRunPressed) && !isRunning){
+        if((!isPushPressed && isMovementPressed && isRunPressed) && !isRunning){
             animator.SetBool(isRunningHash, true);
         }
 
-        else if((!isMovementPressed || !isRunPressed) && isRunning){
+        else if((isPushPressed || !isMovementPressed || !isRunPressed) && isRunning){
             animator.SetBool(isRunningHash, false);
         }
     }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    
 
     void handleGravity(){
         if(characterController.isGrounded){
@@ -116,7 +163,7 @@ public class AnimationAndMovementController : MonoBehaviour
         handleAnimation();
         handleGravity();
         
-        if(isRunPressed){
+        if(isRunPressed && !isPushPressed){
             characterController.Move(currentRunMovement * Time.deltaTime);
         }
         else{
