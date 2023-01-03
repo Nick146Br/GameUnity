@@ -24,14 +24,21 @@ public class AnimationAndMovementController : MonoBehaviour
     bool isPickUp = false;
 
     float rotationFactorPerFrame = 15.0f;
-    float runMultiplier = 5.0f;
-    float walkMultiplier = 1.5f;
+    [Header("Movement Parameters")]
+    [SerializeField] private float runMultiplier = 5.0f;
+    [SerializeField] private float walkMultiplier = 4.0f;
 
     Rigidbody sphere = null; 
     
+    [Header("Pickup Settings")]
+    [SerializeField] Transform holdArea;
+    private GameObject heldObj;
+    private Rigidbody heldObjRB;
+
+    [Header("Physics Parameters")]
+    [SerializeField] private float pickupRange = 1.5f;
     [SerializeField] private float forceMagnitude = 150.0f;
 
-    [SerializeField] Transform holdArea;
 
     void Awake(){
         playerInput = new PlayerInput();
@@ -101,47 +108,49 @@ public class AnimationAndMovementController : MonoBehaviour
     }
     
     
-    void OnControllerColliderHit(ControllerColliderHit hit){
-        if(hit!= null){
-            Rigidbody rigidbody = hit.collider.attachedRigidbody;
-            if(rigidbody != null && isPushPressed && !isPickUp){
-                // Debug.Log(rigidbody.name);
-                // if(rigidbody.name == "Sphere"){
-                    sphere = rigidbody;
-                    isPickUp = true;
+    // void OnControllerColliderHit(ControllerColliderHit hit){
+    //     if(hit!= null){
+    //         Rigidbody rigidbody = hit.collider.attachedRigidbody;
+    //         if(rigidbody != null && isPushPressed && !isPickUp){
+    //             // Debug.Log(rigidbody.name);
+    //             // if(rigidbody.name == "Sphere"){
+    //                 sphere = rigidbody;
+    //                 isPickUp = true;
 
-                    // Vector3 pos = new Vector3(currentMovement.x, 0.0f, currentMovement.z);
-                    // rigidbody.MovePosition(pos);
-                    // rigidbody.position = transform.position;
+    //                 // Vector3 pos = new Vector3(currentMovement.x, 0.0f, currentMovement.z);
+    //                 // rigidbody.MovePosition(pos);
+    //                 // rigidbody.position = transform.position;
 
-                    // Vector3 positionToLookAt;
+    //                 // Vector3 positionToLookAt;
 
-                    // mudar para a posicao que o personagem deveria olhar
-                    // positionToLookAt.x = currentMovement.x;
-                    // positionToLookAt.y = 0.0f;
-                    // positionToLookAt.z = currentMovement.z;
-                    // Quaternion currentRotation = transform.rotation;
+    //                 // mudar para a posicao que o personagem deveria olhar
+    //                 // positionToLookAt.x = currentMovement.x;
+    //                 // positionToLookAt.y = 0.0f;
+    //                 // positionToLookAt.z = currentMovement.z;
+    //                 // Quaternion currentRotation = transform.rotation;
 
-                    // // cria uma nova rotacao baseado em que posicao o usuario comanda para ele ir
+    //                 // // cria uma nova rotacao baseado em que posicao o usuario comanda para ele ir
                     
-                    // Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);
-                    // rigidbody.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationFactorPerFrame * Time.deltaTime);
+    //                 // Quaternion targetRotati>>on = Quaternion.LookRotation(positionToLookAt);
+    //                 // rigidbody.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationFactorPerFrame * Time.deltaTime);
                     
-                    rigidbody.transform.parent = holdArea;
-                    rigidbody.isKinematic = true;
+    //                 rigidbody.transform.parent = holdArea;
+    //                 rigidbody.isKinematic = true;
                     
-                    // Debug.Log(holdArea.position)
+    //                 // Debug.Log(holdArea.position)
 
-                    Vector3 moveDirection = (holdArea.position - rigidbody.transform.position);
+    //                 Vector3 moveDirection = (holdArea.position - rigidbody.transform.position);
                     
-                    rigidbody.AddForce(moveDirection * forceMagnitude);
+    //                 rigidbody.AddForce(moveDirection * forceMagnitude);
 
-                    // Debug.Log(transform.position);
+    //                 holdArea.position = transform.position + (transform.forward*2);
+    //                 holdArea.rotation = transform.rotation;
+    //                 // Debug.Log(transform.position);
                     
-                // }
-            }
-        }
-    }
+    //             // }
+    //         }
+    //     }
+    // }
 
     void handleAnimation(){
         bool isWalking = animator.GetBool(isWalkingHash);
@@ -189,6 +198,34 @@ public class AnimationAndMovementController : MonoBehaviour
             currentRunMovement.y = gravity;
         }
     }
+
+    void PickupObject(GameObject pickObj){
+        if(pickObj.GetComponent<Rigidbody>()){
+            heldObjRB = pickObj.GetComponent<Rigidbody>();
+            heldObjRB.isKinematic = true;
+            heldObjRB.drag = 10;
+            // heldObjRB.contraints = RigidbodyConstraints.FreezeRotation;
+
+            heldObjRB.transform.parent = holdArea;
+            heldObj = pickObj;
+        }
+    }
+    void DropObject(){
+
+        heldObjRB.isKinematic = false;
+        heldObjRB.drag = 1;
+        // heldObjRB.contraints = RigidbodyConstraints.None;
+
+        heldObj.transform.parent = null;
+        heldObj = null;
+    }
+
+    void MoveObject(){
+        if(Vector3.Distance(heldObj.transform.position, holdArea.position) > 0.1f){
+            Vector3 moveDirection = (holdArea.position - heldObj.transform.position);
+            heldObjRB.AddForce(moveDirection*forceMagnitude);
+        }
+    }
     // Update is called once per frame
     void Update()
     {
@@ -196,6 +233,23 @@ public class AnimationAndMovementController : MonoBehaviour
         handleAnimation();
         handleGravity();
         Drop();
+
+        if(isPushPressed){
+            if(heldObj == null){
+                RaycastHit hit;
+                if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, pickupRange)){
+                    PickupObject(hit.transform.gameObject);
+                }     
+            } 
+            else{
+                MoveObject();
+            }
+        }
+        else{
+            if(heldObj != null){
+                DropObject();
+            }
+        }
         
         if(isRunPressed && !isPushPressed){
             characterController.Move(currentRunMovement * Time.deltaTime);
