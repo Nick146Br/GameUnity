@@ -364,6 +364,7 @@
 "Assets/AnimationAndMovementController.cs"
 "Assets/Animations/PlayerInput.cs"
 "Assets/DoorTrigger.cs"
+"Assets/Gerador.cs"
 "Assets/Jammo-Character/Scripts/CharacterSkinController.cs"
 "Assets/Jammo-Character/Scripts/MovementInput.cs"
 "Assets/ObstaclePush.cs"

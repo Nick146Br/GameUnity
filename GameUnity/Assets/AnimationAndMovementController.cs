@@ -112,7 +112,7 @@ public class AnimationAndMovementController : MonoBehaviour
 
                     // Vector3 pos = new Vector3(currentMovement.x, 0.0f, currentMovement.z);
                     // rigidbody.MovePosition(pos);
-                    rigidbody.position = transform.position;
+                    // rigidbody.position = transform.position;
 
                     // Vector3 positionToLookAt;
 
@@ -132,10 +132,12 @@ public class AnimationAndMovementController : MonoBehaviour
                     
                     // Debug.Log(holdArea.position)
 
-
                     Vector3 moveDirection = (holdArea.position - rigidbody.transform.position);
                     
                     rigidbody.AddForce(moveDirection * forceMagnitude);
+
+                    // Debug.Log(transform.position);
+                    
                 }
             }
         }
