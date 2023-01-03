@@ -109,9 +109,32 @@ public class AnimationAndMovementController : MonoBehaviour
                 if(rigidbody.name == "Sphere"){
                     sphere = rigidbody;
                     isPickUp = true;
+
+                    // Vector3 pos = new Vector3(currentMovement.x, 0.0f, currentMovement.z);
+                    // rigidbody.MovePosition(pos);
+                    rigidbody.position = transform.position;
+
+                    // Vector3 positionToLookAt;
+
+                    // mudar para a posicao que o personagem deveria olhar
+                    // positionToLookAt.x = currentMovement.x;
+                    // positionToLookAt.y = 0.0f;
+                    // positionToLookAt.z = currentMovement.z;
+                    // Quaternion currentRotation = transform.rotation;
+
+                    // // cria uma nova rotacao baseado em que posicao o usuario comanda para ele ir
+                    
+                    // Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);
+                    // rigidbody.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationFactorPerFrame * Time.deltaTime);
+                    
                     rigidbody.transform.parent = holdArea;
-                    rigidbody.isKinematic = true; 
+                    rigidbody.isKinematic = true;
+                    
+                    // Debug.Log(holdArea.position)
+
+
                     Vector3 moveDirection = (holdArea.position - rigidbody.transform.position);
+                    
                     rigidbody.AddForce(moveDirection * forceMagnitude);
                 }
             }
