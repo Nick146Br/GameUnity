@@ -13,6 +13,7 @@ public class AnimationAndMovementController : MonoBehaviour
     int isWalkingHash;
     int isRunningHash;
     int isPushingHash;
+    int isJumpingHash;
     //Variaveis para comparar os valores do input com os valores do player
     Vector2 currentMovementInput;
     Vector3 currentMovement;
@@ -21,14 +22,26 @@ public class AnimationAndMovementController : MonoBehaviour
     bool isMovementPressed;
     bool isRunPressed;
     bool isPushPressed;
-    bool isPickUp = false;
+    // bool isPickUp = false;
+
+    // Variaveis do Pulo
+    bool isJumpPressed = false;
+    float initialJumpVelocity;
+
+    [Header("Jump Parameters")]
+    [SerializeField]float maxJumpHeight = 4.0f;
+    [SerializeField]float maxJumpTime = 0.6f;
+    bool isJumping = false;
+    bool isJumpAnimating = false;
+    // Gravidade
+    float gravity = -9.8f;
+    float groundedGravity = -.05f;
 
     float rotationFactorPerFrame = 15.0f;
     [Header("Movement Parameters")]
-    [SerializeField] private float runMultiplier = 5.0f;
-    [SerializeField] private float walkMultiplier = 4.0f;
+    [SerializeField] private float runMultiplier = 7.0f;
+    [SerializeField] private float walkMultiplier = 5.0f;
 
-    Rigidbody sphere = null; 
     
     [Header("Pickup Settings")]
     [SerializeField] Transform holdArea;
@@ -36,7 +49,7 @@ public class AnimationAndMovementController : MonoBehaviour
     private Rigidbody heldObjRB;
 
     [Header("Physics Parameters")]
-    [SerializeField] private float pickupRange = 1.5f;
+    [SerializeField] private float pickupRange = 1.2f;
     [SerializeField] private float forceMagnitude = 150.0f;
 
 
@@ -48,6 +61,7 @@ public class AnimationAndMovementController : MonoBehaviour
         isWalkingHash = Animator.StringToHash("isWalking");
         isRunningHash = Animator.StringToHash("isRunning");
         isPushingHash = Animator.StringToHash("isPushing");
+        isJumpingHash = Animator.StringToHash("isJumping");
 
         playerInput.CharacterControls.Move.started += onMovementInput;
         playerInput.CharacterControls.Move.canceled += onMovementInput;
@@ -56,10 +70,43 @@ public class AnimationAndMovementController : MonoBehaviour
         playerInput.CharacterControls.Push.started += onPush;
         playerInput.CharacterControls.Push.canceled += onPush;
         playerInput.CharacterControls.Push.performed += onPush;
+        
+        playerInput.CharacterControls.Jump.started += onJump;
+        playerInput.CharacterControls.Jump.canceled += onJump;
+        playerInput.CharacterControls.Jump.performed += onJump;
 
         playerInput.CharacterControls.Run.started += onRun;
         playerInput.CharacterControls.Run.canceled += onRun;
         playerInput.CharacterControls.Run.performed += onRun;
+
+        setupJumpVariables();
+    }
+
+    void setupJumpVariables(){
+        float timeToApex = maxJumpTime / 2;
+        gravity = (-2*maxJumpHeight) / Mathf.Pow(timeToApex, 2);
+        initialJumpVelocity = (2*maxJumpHeight) / timeToApex;
+    }
+
+    void handleJump(){
+        bool isPushing = animator.GetBool(isPushingHash);
+        if(!isPushing){
+            if(!isJumping && characterController.isGrounded && isJumpPressed){
+                isJumping = true;
+                animator.SetBool(isJumpingHash, true);
+                isJumpAnimating = true;
+                currentMovement.y = initialJumpVelocity * 0.5f;
+                currentRunMovement.y = initialJumpVelocity * 0.5f; 
+            }
+            else if (!isJumpPressed && isJumping && characterController.isGrounded){
+                isJumping = false;
+            }
+        }
+    }
+
+    void onJump(InputAction.CallbackContext context){
+        isJumpPressed = context.ReadValueAsButton();
+        // Debug.Log(isJumpPressed);
     }
 
     void onRun(InputAction.CallbackContext context){
@@ -99,13 +146,154 @@ public class AnimationAndMovementController : MonoBehaviour
         isMovementPressed = currentMovementInput.x != 0 || currentMovementInput.y != 0;
     }
 
-    void Drop(){
-        if(!isPushPressed && isPickUp){
-            sphere.transform.parent = null;
-            sphere.isKinematic = false; 
-            isPickUp = false;
+   
+    void handleAnimation(){
+        bool isWalking = animator.GetBool(isWalkingHash);
+        bool isRunning = animator.GetBool(isRunningHash);
+        bool isPushing = animator.GetBool(isPushingHash);
+
+        // Setar aqui o colisor aqui - Precisa do colisor pra empurrar algo
+
+        if(isPushPressed && !isPushing){
+            animator.SetBool(isPushingHash, true);
+            animator.SetBool(isRunningHash, false);
+        }
+
+        else if(!isPushPressed && isPushing){
+            animator.SetBool(isPushingHash, false);
+        }
+
+        if(isMovementPressed && !isWalking){
+            animator.SetBool(isWalkingHash, true);
+        }
+
+        else if(!isMovementPressed && isWalking){
+            animator.SetBool(isWalkingHash, false);
+        }
+        
+        if((!isPushPressed && isMovementPressed && isRunPressed) && !isRunning){
+            animator.SetBool(isRunningHash, true);
+        }
+
+        else if((isPushPressed || !isMovementPressed || !isRunPressed) && isRunning){
+            animator.SetBool(isRunningHash, false);
         }
     }
+    
+
+    void handleGravity(){
+
+        bool isFalling = currentMovement.y <= 0.0f || !isJumpPressed;
+        float fallMultiplier = 2.0f;
+        float previousYVelocity;
+        float newYVelocity;
+        float nextYVelocity;
+
+        if(characterController.isGrounded){
+            if(isJumpAnimating){
+                animator.SetBool(isJumpingHash, false);
+                isJumpAnimating = false;
+            }
+            currentMovement.y = groundedGravity;
+            currentRunMovement.y = groundedGravity;
+        }
+        else if (isFalling){
+            
+            previousYVelocity = currentMovement.y;
+            newYVelocity = currentMovement.y + (gravity * fallMultiplier * Time.deltaTime);
+            nextYVelocity = (previousYVelocity + newYVelocity) * .5f;
+            
+            currentMovement.y = nextYVelocity;
+            currentRunMovement.y = nextYVelocity;
+        }
+        else{
+            previousYVelocity = currentMovement.y;
+            newYVelocity = currentMovement.y + (gravity*Time.deltaTime);
+            nextYVelocity = (previousYVelocity + newYVelocity) * .5f;
+            currentMovement.y = nextYVelocity;
+            currentRunMovement.y = nextYVelocity;
+        }
+    }
+
+    void PickupObject(GameObject pickObj){
+        if(pickObj.GetComponent<Rigidbody>()){
+            heldObjRB = pickObj.GetComponent<Rigidbody>();
+            heldObjRB.isKinematic = true;
+            heldObjRB.drag = 10;
+            // heldObjRB.contraints = RigidbodyConstraints.FreezeRotation;
+
+            heldObjRB.transform.parent = holdArea;
+            heldObj = pickObj;
+        }
+    }
+    void DropObject(){
+
+        heldObjRB.isKinematic = false;
+        heldObjRB.drag = 1;
+        // heldObjRB.contraints = RigidbodyConstraints.None;
+
+        heldObj.transform.parent = null;
+        heldObj = null;
+    }
+
+    void MoveObject(){
+        if(Vector3.Distance(heldObj.transform.position, holdArea.position) > 0.1f){
+            Vector3 moveDirection = (holdArea.position - heldObj.transform.position);
+            heldObjRB.AddForce(moveDirection*forceMagnitude);
+        }
+    }
+    // Update is called once per frame
+    void Update()
+    {
+        handleRotation();
+        handleAnimation();
+        // Drop();
+        
+        if(isPushPressed){
+            if(heldObj == null){
+                RaycastHit hit;
+                if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, pickupRange)){
+                    PickupObject(hit.transform.gameObject);
+                }     
+            } 
+            else{
+                MoveObject();
+            }
+        }
+        else{
+            if(heldObj != null){
+                DropObject();
+            }
+        }
+
+        
+        if(isRunPressed && !isPushPressed){
+            characterController.Move(currentRunMovement * Time.deltaTime);
+        }
+        else{
+            characterController.Move(currentMovement * Time.deltaTime);
+        }
+
+        handleGravity();
+        handleJump();
+    }
+
+    void OnEnable(){
+        playerInput.CharacterControls.Enable();
+    }
+    void OnDisable(){
+        playerInput.CharacterControls.Disable();
+    }
+}
+
+/*-----------------------------------------------------------------------------------------------------------------------------*/
+ // void Drop(){
+    //     if(!isPushPressed && isPickUp){
+    //         sphere.transform.parent = null;
+    //         sphere.isKinematic = false; 
+    //         isPickUp = false;
+    //     }
+    // }
     
     
     // void OnControllerColliderHit(ControllerColliderHit hit){
@@ -151,118 +339,3 @@ public class AnimationAndMovementController : MonoBehaviour
     //         }
     //     }
     // }
-
-    void handleAnimation(){
-        bool isWalking = animator.GetBool(isWalkingHash);
-        bool isRunning = animator.GetBool(isRunningHash);
-        bool isPushing = animator.GetBool(isPushingHash);
-
-        // Setar aqui o colisor aqui - Precisa do colisor pra empurrar algo
-
-        if(isPushPressed && !isPushing){
-            animator.SetBool(isPushingHash, true);
-            animator.SetBool(isRunningHash, false);
-        }
-
-        else if(!isPushPressed && isPushing){
-            animator.SetBool(isPushingHash, false);
-        }
-
-        if(isMovementPressed && !isWalking){
-            animator.SetBool(isWalkingHash, true);
-        }
-
-        else if(!isMovementPressed && isWalking){
-            animator.SetBool(isWalkingHash, false);
-        }
-        
-        if((!isPushPressed && isMovementPressed && isRunPressed) && !isRunning){
-            animator.SetBool(isRunningHash, true);
-        }
-
-        else if((isPushPressed || !isMovementPressed || !isRunPressed) && isRunning){
-            animator.SetBool(isRunningHash, false);
-        }
-    }
-    
-
-    void handleGravity(){
-        if(characterController.isGrounded){
-            float groundedGravity = -.05f;
-            currentMovement.y = groundedGravity;
-            currentRunMovement.y = groundedGravity;
-        }
-        else{
-            float gravity = -9.8f;
-            currentMovement.y = gravity;
-            currentRunMovement.y = gravity;
-        }
-    }
-
-    void PickupObject(GameObject pickObj){
-        if(pickObj.GetComponent<Rigidbody>()){
-            heldObjRB = pickObj.GetComponent<Rigidbody>();
-            heldObjRB.isKinematic = true;
-            heldObjRB.drag = 10;
-            // heldObjRB.contraints = RigidbodyConstraints.FreezeRotation;
-
-            heldObjRB.transform.parent = holdArea;
-            heldObj = pickObj;
-        }
-    }
-    void DropObject(){
-
-        heldObjRB.isKinematic = false;
-        heldObjRB.drag = 1;
-        // heldObjRB.contraints = RigidbodyConstraints.None;
-
-        heldObj.transform.parent = null;
-        heldObj = null;
-    }
-
-    void MoveObject(){
-        if(Vector3.Distance(heldObj.transform.position, holdArea.position) > 0.1f){
-            Vector3 moveDirection = (holdArea.position - heldObj.transform.position);
-            heldObjRB.AddForce(moveDirection*forceMagnitude);
-        }
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        handleRotation();
-        handleAnimation();
-        handleGravity();
-        Drop();
-
-        if(isPushPressed){
-            if(heldObj == null){
-                RaycastHit hit;
-                if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, pickupRange)){
-                    PickupObject(hit.transform.gameObject);
-                }     
-            } 
-            else{
-                MoveObject();
-            }
-        }
-        else{
-            if(heldObj != null){
-                DropObject();
-            }
-        }
-        
-        if(isRunPressed && !isPushPressed){
-            characterController.Move(currentRunMovement * Time.deltaTime);
-        }
-        else{
-            characterController.Move(currentMovement * Time.deltaTime);
-        }
-    }
-
-    void OnEnable(){
-        playerInput.CharacterControls.Enable();
-    }
-    void OnDisable(){
-        playerInput.CharacterControls.Disable();
-    }
-}
