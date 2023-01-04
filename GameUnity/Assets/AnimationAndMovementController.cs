@@ -218,6 +218,7 @@ public class AnimationAndMovementController : MonoBehaviour
     void PickupObject(GameObject pickObj){
         if(pickObj.GetComponent<Rigidbody>()){
             heldObjRB = pickObj.GetComponent<Rigidbody>();
+            
             heldObjRB.isKinematic = true;
             heldObjRB.drag = 10;
             // heldObjRB.contraints = RigidbodyConstraints.FreezeRotation;
@@ -239,6 +240,7 @@ public class AnimationAndMovementController : MonoBehaviour
     void MoveObject(){
         if(Vector3.Distance(heldObj.transform.position, holdArea.position) > 0.1f){
             Vector3 moveDirection = (holdArea.position - heldObj.transform.position);
+            // Debug.Log(moveDirection);
             heldObjRB.AddForce(moveDirection*forceMagnitude);
         }
     }
@@ -252,8 +254,10 @@ public class AnimationAndMovementController : MonoBehaviour
         if(isPushPressed){
             if(heldObj == null){
                 RaycastHit hit;
+                
                 if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, pickupRange)){
-                    PickupObject(hit.transform.gameObject);
+                    Vector3 moveDirection = (holdArea.position - hit.transform.gameObject.transform.position);
+                    if(moveDirection.y <= 0.02f) PickupObject(hit.transform.gameObject);
                 }     
             } 
             else{
