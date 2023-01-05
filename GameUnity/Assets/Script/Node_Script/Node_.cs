@@ -17,7 +17,7 @@ public class Node_ : MonoBehaviour
     }
     void Update(){  
         // targetPosition = this.transform.GetChild(0).transform.position;
-        Debug.Log(valor);
+        // Debug.Log(valor);
         
     }
 

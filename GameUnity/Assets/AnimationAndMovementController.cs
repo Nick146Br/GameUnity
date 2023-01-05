@@ -222,8 +222,9 @@ public class AnimationAndMovementController : MonoBehaviour
             heldObjRB.isKinematic = true;
             heldObjRB.drag = 10;
             // heldObjRB.contraints = RigidbodyConstraints.FreezeRotation;
-
-            heldObjRB.transform.parent = holdArea;
+           
+            if(heldObjRB.transform.parent != null) heldObjRB.transform.parent.parent = holdArea;
+            else heldObjRB.transform.parent = holdArea;
             heldObj = pickObj;
         }
     }
@@ -232,8 +233,9 @@ public class AnimationAndMovementController : MonoBehaviour
         heldObjRB.isKinematic = false;
         heldObjRB.drag = 1;
         // heldObjRB.contraints = RigidbodyConstraints.None;
-
-        heldObj.transform.parent = null;
+        // Debug.Log(heldObj.transform.parent.parent.parent);
+        if(heldObj.transform.parent.parent.parent != null)heldObj.transform.parent.parent = null; 
+        else heldObj.transform.parent = null;
         heldObj = null;
     }
 
