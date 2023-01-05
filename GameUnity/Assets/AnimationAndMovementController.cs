@@ -7,6 +7,7 @@ public class AnimationAndMovementController : MonoBehaviour
 {
     //Variaveis de Referencia
     PlayerInput playerInput;
+    string nome = "Jammo_LowPoly";
     CharacterController characterController;
     Animator animator;
 
@@ -221,21 +222,18 @@ public class AnimationAndMovementController : MonoBehaviour
             
             heldObjRB.isKinematic = true;
             heldObjRB.drag = 10;
-            // heldObjRB.contraints = RigidbodyConstraints.FreezeRotation;
-           
-            if(heldObjRB.transform.parent != null) heldObjRB.transform.parent.parent = holdArea;
-            else heldObjRB.transform.parent = holdArea;
+            heldObjRB.transform.root.parent = holdArea;
             heldObj = pickObj;
         }
     }
     void DropObject(){
-
         heldObjRB.isKinematic = false;
         heldObjRB.drag = 1;
         // heldObjRB.contraints = RigidbodyConstraints.None;
-        // Debug.Log(heldObj.transform.parent.parent.parent);
-        if(heldObj.transform.parent.parent.parent != null)heldObj.transform.parent.parent = null; 
-        else heldObj.transform.parent = null;
+        Transform t = transform.Find("Ghost");
+        t = t.GetChild(0);
+        // Debug.Log(t);
+        t.parent = null;
         heldObj = null;
     }
 
