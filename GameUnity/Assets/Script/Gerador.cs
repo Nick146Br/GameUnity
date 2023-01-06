@@ -9,7 +9,7 @@ public class Gerador : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        CreateMarbles(20);
+        CreateMarbles(3);
         // GameObject SphereClone = Instantiate(SphereOriginal);
     }
 
