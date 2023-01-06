@@ -89,8 +89,8 @@ public class AnimationAndMovementController : MonoBehaviour
     }
 
     void handleJump(){
-        bool isPushing = animator.GetBool(isPushingHash);
-        if(!isPushing){
+        // bool isPushing = animator.GetBool(isPushingHash);
+        // if(!isPushing){
             if(!isJumping && characterController.isGrounded && isJumpPressed){
                 isJumping = true;
                 animator.SetBool(isJumpingHash, true);
@@ -101,7 +101,7 @@ public class AnimationAndMovementController : MonoBehaviour
             else if (!isJumpPressed && isJumping && characterController.isGrounded){
                 isJumping = false;
             }
-        }
+        // }
     }
 
     void onJump(InputAction.CallbackContext context){
