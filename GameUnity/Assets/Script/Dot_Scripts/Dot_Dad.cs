@@ -10,15 +10,18 @@ public class Dot_Dad : MonoBehaviour
     public bool verifica_sub = false;
     public int contador =0;
     public int filhos =0;
+    private LineRenderer lineRenderer;
     // Start is called before the first frame update
     void Start()
     {
-        
+        lineRenderer = GetComponent<LineRenderer>();
         verifica = true;
         var dad = gameObject.transform.root;
         if(dad.childCount > index*2){
             var child_1 = dad.transform.GetChild((index*2)-1);
             Debug.Log("Pai" + index.ToString() +"=" +  child_1.GetComponent<Dot_Dad>().index.ToString());
+            lineRenderer.SetPosition(1, transform.position);
+            lineRenderer.SetPosition(0, child_1.transform.position);
             if(child_1.GetComponent<Dot_Dad>().valor > valor){
                 verifica = false;
             }
@@ -30,6 +33,8 @@ public class Dot_Dad : MonoBehaviour
         if(dad.childCount > index*2 + 1){
             var child_2 = dad.transform.GetChild((index*2)).gameObject;
             Debug.Log("Pai" + index.ToString() +"=" +  child_2.GetComponent<Dot_Dad>().index.ToString());
+            lineRenderer.SetVertexCount(3);
+            lineRenderer.SetPosition(2, child_2.transform.position);
             if(child_2.GetComponent<Dot_Dad>().valor > valor){
                 verifica = false;
             }
