@@ -16,12 +16,12 @@ public class Gerador_Dot : MonoBehaviour
 
     BinaryHeap heap;
     [Header("parametros")]
-    [SerializeField]float razao = 0.75f;
+    [SerializeField]float razao = 0.5f;
     [SerializeField]float altura = 30.0f;
     // Start is called before the first frame update
     void Start()
     {
-        float Largura = 16.0f;
+        float Largura = 32.0f;
         int num = 20;
         heap = new BinaryHeap(num, razao);
         CreateMarbles(num);
@@ -121,9 +121,9 @@ public class Gerador_Dot : MonoBehaviour
         for(int i=1;i<=qtd;i++){
             Debug.Log(posicaoX[i]);
             Debug.Log(posicaoY[i]);
-            GameObject DotClone = Instantiate(DotOriginal, new Vector3(posicaoX[i], DotOriginal.transform.position.y, posicaoY[i]), DotOriginal.transform.rotation);
+            GameObject DotClone = Instantiate(DotOriginal, new Vector3(posicaoY[i], DotOriginal.transform.position.y, posicaoX[i]), DotOriginal.transform.rotation);
             DotClone.transform.parent = transform;
-            GameObject SphereClone = Instantiate(SphereOriginal, new Vector3(posicaoX[i], SphereOriginal.transform.position.y, posicaoY[i]), SphereOriginal.transform.rotation);
+            GameObject SphereClone = Instantiate(SphereOriginal, new Vector3(posicaoY[i], SphereOriginal.transform.position.y, posicaoX[i]), SphereOriginal.transform.rotation);
             DotClone.SendMessage("getIndex", i,SendMessageOptions.DontRequireReceiver);
             DotClone.SendMessage("getValor", tree_nodes[i-1],SendMessageOptions.DontRequireReceiver);
         }
