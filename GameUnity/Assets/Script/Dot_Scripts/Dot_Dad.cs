@@ -42,9 +42,9 @@ public class Dot_Dad : MonoBehaviour
             verifica_sub = true;
         }
         
-        if(verifica==true){
-            transform.position = this.transform.position + new Vector3(0,3f,0);
-        }
+        // if(verifica==true){
+        //     transform.position = this.transform.position + new Vector3(0,3f,0);
+        // }
         
         
     }

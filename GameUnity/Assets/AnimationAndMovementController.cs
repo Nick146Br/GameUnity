@@ -7,7 +7,6 @@ public class AnimationAndMovementController : MonoBehaviour
 {
     //Variaveis de Referencia
     PlayerInput playerInput;
-    string nome = "Jammo_LowPoly";
     CharacterController characterController;
     Animator animator;
 
