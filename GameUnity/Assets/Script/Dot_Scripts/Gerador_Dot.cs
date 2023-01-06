@@ -112,8 +112,8 @@ public class Gerador_Dot : MonoBehaviour
 
             this.posicaoX[indice] = posx;
             this.posicaoY[indice] = posy;
-            Tree(2*indice, nivel + 1, posx - rx, posy + ry, rx*razao, ry);
-            Tree(2*indice + 1, nivel + 1, posx + rx, posy + ry, rx*razao, ry);
+            Tree(2*indice, nivel + 1, posx + rx, posy + ry, rx*razao, ry);
+            Tree(2*indice + 1, nivel + 1, posx - rx, posy + ry, rx*razao, ry);
         }
     }
 
