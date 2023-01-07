@@ -45,11 +45,14 @@ public class AnimationAndMovementController : MonoBehaviour
     
     [Header("Pickup Settings")]
     [SerializeField] Transform holdArea;
+    [SerializeField] private Camera PlayerCamera;
+    [SerializeField] private LayerMask PickupLayer;
     private GameObject heldObj;
     private Rigidbody heldObjRB;
+    private Collider ColliderHeldObj;
 
     [Header("Physics Parameters")]
-    [SerializeField] private float pickupRange = 1.2f;
+    [SerializeField] private float PickupRange = 1.2f;
     [SerializeField] private float forceMagnitude = 150.0f;
 
 
@@ -218,7 +221,7 @@ public class AnimationAndMovementController : MonoBehaviour
     void PickupObject(GameObject pickObj){
         if(pickObj.GetComponent<Rigidbody>()){
             heldObjRB = pickObj.GetComponent<Rigidbody>();
-            
+            // ColliderHeldObj = pickObj.GetComponent<Collider>();
             heldObjRB.isKinematic = true;
             heldObjRB.drag = 10;
             heldObjRB.transform.root.parent = holdArea;
@@ -252,11 +255,14 @@ public class AnimationAndMovementController : MonoBehaviour
         
         if(isPushPressed){
             if(heldObj == null){
-                RaycastHit hit;
+                // RaycastHit hit;
                 
-                if(Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, pickupRange)){
-                    Vector3 moveDirection = (holdArea.position - hit.transform.gameObject.transform.position);
-                    if(moveDirection.y <= 0.02f) PickupObject(hit.transform.gameObject);
+                Ray PickupRay = new Ray(PlayerCamera.transform.position, PlayerCamera.transform.forward);
+
+                if(Physics.Raycast(PickupRay, out RaycastHit hitInfo, PickupRange, PickupLayer)){
+                    // Vector3 moveDirection = (holdArea.position - hit.transform.gameObject.transform.position);
+                    // if(moveDirection.y <= 0.02f) 
+                    PickupObject(hitInfo.transform.gameObject);
                 }     
             } 
             else{
