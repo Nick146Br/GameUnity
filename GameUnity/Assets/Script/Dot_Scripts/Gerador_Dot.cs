@@ -18,11 +18,15 @@ public class Gerador_Dot : MonoBehaviour
     [Header("parametros")]
     [SerializeField]float razao = 0.5f;
     [SerializeField]float altura = 30.0f;
+    [SerializeField]float InicioY = 10.0f;
+    [SerializeField]float Largura = 28.0f;
+    [SerializeField]int MinimoDeBolas = 6;
+    [SerializeField]int MaximoDeBolas = 8;
     // Start is called before the first frame update
     void Start()
     {
-        float Largura = 32.0f;
-        int num = 20;
+        // float Largura = 32.0f;
+        int num = UnityEngine.Random.Range(MinimoDeBolas, MaximoDeBolas);
         heap = new BinaryHeap(num, razao);
         CreateMarbles(num);
 
@@ -121,11 +125,11 @@ public class Gerador_Dot : MonoBehaviour
         for(int i=1;i<=qtd;i++){
             Debug.Log(posicaoX[i]);
             Debug.Log(posicaoY[i]);
-            GameObject DotClone = Instantiate(DotOriginal, new Vector3(posicaoY[i], DotOriginal.transform.position.y, posicaoX[i]), DotOriginal.transform.rotation);
+            GameObject DotClone = Instantiate(DotOriginal, new Vector3(posicaoY[i]+InicioY, DotOriginal.transform.position.y, posicaoX[i]), DotOriginal.transform.rotation);
             DotClone.transform.parent = transform;
-            GameObject SphereClone = Instantiate(SphereOriginal, new Vector3(posicaoY[i], SphereOriginal.transform.position.y, posicaoX[i]), SphereOriginal.transform.rotation);
+            // GameObject SphereClone = Instantiate(SphereOriginal, new Vector3(posicaoY[i]+InicioY, SphereOriginal.transform.position.y, posicaoX[i]), SphereOriginal.transform.rotation);
             DotClone.SendMessage("getIndex", i,SendMessageOptions.DontRequireReceiver);
-            DotClone.SendMessage("getValor", tree_nodes[i-1],SendMessageOptions.DontRequireReceiver);
+            // DotClone.SendMessage("getValor", tree_nodes[i-1],SendMessageOptions.DontRequireReceiver);
         }
     }
 
@@ -136,8 +140,8 @@ public class Gerador_Dot : MonoBehaviour
             int valor = UnityEngine.Random.Range(1, 100);
             heap.AdicionarElementoHeap(valor);
             tree_nodes.Add(valor);
-            // GameObject SphereClone = Instantiate(SphereOriginal, new Vector3(i*0.6f, SphereOriginal.transform.position.y, i*0.75f), SphereOriginal.transform.rotation);
-            // SphereClone.SendMessage("getVal", valor,SendMessageOptions.DontRequireReceiver);
+            GameObject SphereClone = Instantiate(SphereOriginal, new Vector3(i*0.6f, SphereOriginal.transform.position.y, i*0.75f), SphereOriginal.transform.rotation);
+            SphereClone.SendMessage("getVal", valor,SendMessageOptions.DontRequireReceiver);
         }
     }
 }
