@@ -42,7 +42,7 @@ public class Tree : MonoBehaviour
         MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
         if(numero == -1) meshRenderer.material = oldMaterial;
         else meshRenderer.material = newMaterial;
-        if(time == 60) numero = -1;  
+        if(time == 90) numero = -1;  
         time += 1;
 
         
