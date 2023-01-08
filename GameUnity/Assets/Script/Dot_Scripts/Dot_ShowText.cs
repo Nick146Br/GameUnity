@@ -12,15 +12,15 @@ public class Dot_ShowText : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        var dad = gameObject.GetComponentInParent<Dot_Dad>();
-        index = dad.index;
-        valor = dad.valor;
-        verifica_sub = dad.verifica_sub;
-        Vector3 target_position = dad.transform.GetChild(0).transform.position + new Vector3(0,height,0);
-        transform.position = target_position;
-        if(FloatingTextPrefab){
-            ShowFloatingText();
-        }
+        // var dad = gameObject.GetComponentInParent<Dot_Dad>();
+        // index = dad.index;
+        // valor = dad.valor;
+        // verifica_sub = dad.verifica_sub;
+        // Vector3 target_position = dad.transform.GetChild(0).transform.position + new Vector3(0,height,0);
+        // transform.position = target_position;
+        // if(FloatingTextPrefab){
+        //     ShowFloatingText();
+        // }
     }
     void Update()
     {

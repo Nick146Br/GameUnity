@@ -64,7 +64,7 @@ public class Dot_Dad : MonoBehaviour
     {
 
         valor = transform.GetChild(0).GetChild(1).GetComponent<Tree>().numero;
-
+        Debug.Log(valor);
         verifica = true;
         filhos = 0;
         contador =0;
