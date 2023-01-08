@@ -47,13 +47,13 @@ public class Gerador_Dot : MonoBehaviour
     void Update()
     {
         // Debug.Log(transform.childCount);
-        // var child_1 = transform.GetChild(0).gameObject;
-        // accepted = child_1.GetComponent<Dot_Dad>().verifica_sub;                
-        // if(accepted==true){
-        //     Debug.Log("Accepted!");
-        // }else{
-        //     Debug.Log("WA!");
-        // }
+        var child_1 = transform.GetChild(0).gameObject;
+        accepted = child_1.GetComponent<Dot_Dad>().verifica_sub;                
+        if(accepted==true){
+            Debug.Log("Accepted!");
+        }else{
+            Debug.Log("WA!");
+        }
         
         
     }

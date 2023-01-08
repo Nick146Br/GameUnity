@@ -325,7 +325,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0.08717862, y: 0.17853126, z: -0.009086257, w: 0.9800224}
-  m_LocalPosition: {x: 1.54, y: 12.66, z: -39.11}
+  m_LocalPosition: {x: 13, y: 11.2, z: -33.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1001,8 +1001,8 @@ MonoBehaviour:
   altura: 10
   InicioY: 10
   Largura: 28
-  MinimoDeBolas: 6
-  MaximoDeBolas: 8
+  MinimoDeBolas: 2
+  MaximoDeBolas: 5
 --- !u!4 &2060773930
 Transform:
   m_ObjectHideFlags: 0
