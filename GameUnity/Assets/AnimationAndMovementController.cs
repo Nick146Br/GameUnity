@@ -18,6 +18,8 @@ public class AnimationAndMovementController : MonoBehaviour
     Vector2 currentMovementInput;
     Vector3 currentMovement;
     Vector3 currentRunMovement;
+    Vector3 _cameraRelativeMovement;
+    Vector3 _cameraRelativeRunMovement;
     
     bool isMovementPressed;
     bool isRunPressed;
@@ -123,9 +125,9 @@ public class AnimationAndMovementController : MonoBehaviour
     void handleRotation(){
         Vector3 positionToLookAt;
         // mudar para a posicao que o personagem deveria olhar
-        positionToLookAt.x = currentMovement.x;
+        positionToLookAt.x = _cameraRelativeMovement.x;
         positionToLookAt.y = 0.0f;
-        positionToLookAt.z = currentMovement.z;
+        positionToLookAt.z = _cameraRelativeMovement.z;
 
         // rotacao atual do nosso personagem
         Quaternion currentRotation = transform.rotation;
@@ -252,6 +254,9 @@ public class AnimationAndMovementController : MonoBehaviour
         handleRotation();
         handleAnimation();
         // Drop();
+
+        _cameraRelativeMovement = ConvertToCameraSpace(currentMovement);
+        _cameraRelativeRunMovement = ConvertToCameraSpace(currentRunMovement);
         
         if(isPushPressed){
             if(heldObj == null){
@@ -277,14 +282,43 @@ public class AnimationAndMovementController : MonoBehaviour
 
         
         if(isRunPressed && !isPushPressed){
-            characterController.Move(currentRunMovement * Time.deltaTime);
+            characterController.Move(_cameraRelativeRunMovement * Time.deltaTime);
         }
         else{
-            characterController.Move(currentMovement * Time.deltaTime);
+            characterController.Move(_cameraRelativeMovement * Time.deltaTime);
         }
 
         handleGravity();
         handleJump();
+    }
+
+
+    Vector3 ConvertToCameraSpace(Vector3 vectorToRotate)
+    {
+
+        float currentYValue = vectorToRotate.y;
+        // get the forward and right directional vectors of the camera
+        Vector3 cameraForward = Camera.main.transform.forward;
+        Vector3 cameraRight = Camera.main.transform.right;
+
+        // remove the Y values to ignore upward/downward camera angles
+        cameraForward.y = 0;
+        cameraRight.y = 0 ;
+
+        // re-normalize both vectors so they each have a magnitude of 1
+        cameraForward = cameraForward.normalized;
+        cameraRight = cameraRight.normalized;
+
+        // rotate the X and Z VectorToRotate values to camera space
+        Vector3 cameraForwardZProduct = vectorToRotate.z * cameraForward;
+        Vector3 cameraRightXProduct = vectorToRotate.x * cameraRight;
+
+        //the sum of both product is the Vector3 in camera space
+        Vector3 vectorRotatedToCameraSpace = cameraForwardZProduct + cameraRightXProduct;
+        vectorRotatedToCameraSpace.y = currentYValue;
+        return vectorRotatedToCameraSpace;
+
+
     }
 
     void OnEnable(){
