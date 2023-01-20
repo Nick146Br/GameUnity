@@ -366,6 +366,7 @@
 "Assets/DoorTrigger.cs"
 "Assets/Jammo-Character/Scripts/CharacterSkinController.cs"
 "Assets/Jammo-Character/Scripts/MovementInput.cs"
+"Assets/LevelLoader.cs"
 "Assets/ObstaclePush.cs"
 "Assets/Script/Dot_Scripts/Dot_Dad.cs"
 "Assets/Script/Dot_Scripts/Dot_ShowText.cs"
