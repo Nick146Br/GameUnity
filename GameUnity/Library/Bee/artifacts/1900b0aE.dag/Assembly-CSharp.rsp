@@ -371,6 +371,8 @@
 "Assets/Script/Dot_Scripts/Dot_Dad.cs"
 "Assets/Script/Dot_Scripts/Dot_ShowText.cs"
 "Assets/Script/Dot_Scripts/Gerador_Dot.cs"
+"Assets/Script/Josephus/Gerador_Josephus.cs"
+"Assets/Script/Josephus/Interaction.cs"
 "Assets/Script/Node_Script/Node_.cs"
 "Assets/Script/Node_Script/Node_Follower_.cs"
 "Assets/Script/Tree.cs"

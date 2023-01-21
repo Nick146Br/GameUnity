@@ -117,7 +117,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5ea1f82398f23814ab536adf892401ac, type: 2}
+  - {fileID: 2100000, guid: 67aee73dec491a44cb1f9ddd805c34c8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -255,9 +255,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: InternalSphere
       objectReference: {fileID: 0}
+    - target: {fileID: 5164090571065228255, guid: 3e9deb5eda6f1f740878deea2d954a88, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.005
+      objectReference: {fileID: 0}
     - target: {fileID: 5164090571110374776, guid: 3e9deb5eda6f1f740878deea2d954a88, type: 3}
       propertyPath: m_Name
       value: ExternalSphere
+      objectReference: {fileID: 0}
+    - target: {fileID: 5164090571110374777, guid: 3e9deb5eda6f1f740878deea2d954a88, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.004
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3e9deb5eda6f1f740878deea2d954a88, type: 3}
