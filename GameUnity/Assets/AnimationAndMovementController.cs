@@ -17,7 +17,7 @@ public class AnimationAndMovementController : MonoBehaviour
     int isSittingHash;
     int contSit = 0;
     int contStand = 0;
-    int limite = 60;
+    int limite = 20;
     //Variaveis para comparar os valores do input com os valores do player
     Vector2 currentMovementInput;
     Vector3 currentMovement;
