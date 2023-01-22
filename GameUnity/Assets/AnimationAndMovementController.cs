@@ -14,6 +14,10 @@ public class AnimationAndMovementController : MonoBehaviour
     int isRunningHash;
     int isPushingHash;
     int isJumpingHash;
+    int isSittingHash;
+    int contSit = 0;
+    int contStand = 0;
+    int limite = 30;
     //Variaveis para comparar os valores do input com os valores do player
     Vector2 currentMovementInput;
     Vector3 currentMovement;
@@ -24,6 +28,8 @@ public class AnimationAndMovementController : MonoBehaviour
     bool isMovementPressed;
     bool isRunPressed;
     bool isPushPressed;
+    bool isSittingPressed;
+    // bool isInsideTheCircle = false;
     // bool isPickUp = false;
 
     // Variaveis do Pulo
@@ -34,7 +40,9 @@ public class AnimationAndMovementController : MonoBehaviour
     [SerializeField]float maxJumpHeight = 4.0f;
     [SerializeField]float maxJumpTime = 0.6f;
     bool isJumping = false;
+    bool isSitting = false;
     bool isJumpAnimating = false;
+    bool allowSitting = false;
     // Gravidade
     float gravity = -9.8f;
     float groundedGravity = -.05f;
@@ -57,8 +65,8 @@ public class AnimationAndMovementController : MonoBehaviour
     [SerializeField] private float PickupRange = 1.2f;
     [SerializeField] private float forceMagnitude = 150.0f;
 
-
     void Awake(){
+        
         playerInput = new PlayerInput();
         characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
@@ -67,6 +75,7 @@ public class AnimationAndMovementController : MonoBehaviour
         isRunningHash = Animator.StringToHash("isRunning");
         isPushingHash = Animator.StringToHash("isPushing");
         isJumpingHash = Animator.StringToHash("isJumping");
+        isSittingHash = Animator.StringToHash("isSitting");
 
         playerInput.CharacterControls.Move.started += onMovementInput;
         playerInput.CharacterControls.Move.canceled += onMovementInput;
@@ -83,6 +92,10 @@ public class AnimationAndMovementController : MonoBehaviour
         playerInput.CharacterControls.Run.started += onRun;
         playerInput.CharacterControls.Run.canceled += onRun;
         playerInput.CharacterControls.Run.performed += onRun;
+        
+        playerInput.CharacterControls.SitDown.started += onSit;
+        playerInput.CharacterControls.SitDown.performed += onSit;
+        playerInput.CharacterControls.SitDown.canceled += onSit;
 
         setupJumpVariables();
     }
@@ -96,7 +109,7 @@ public class AnimationAndMovementController : MonoBehaviour
     void handleJump(){
         // bool isPushing = animator.GetBool(isPushingHash);
         // if(!isPushing){
-            if(!isJumping && characterController.isGrounded && isJumpPressed){
+            if(!isJumping && characterController.isGrounded && isJumpPressed && !isSitting){
                 isJumping = true;
                 animator.SetBool(isJumpingHash, true);
                 isJumpAnimating = true;
@@ -108,7 +121,23 @@ public class AnimationAndMovementController : MonoBehaviour
             }
         // }
     }
+    void handleSit(){
+        if(allowSitting && contStand == limite && !isSitting && !isJumping && isSittingPressed){
+            contSit = 0;
+            animator.SetBool(isSittingHash, true);
+            isSitting = true;
+        }
+        else if(contSit == limite && isSitting && isSittingPressed){
+            contStand = 0;
+            animator.SetBool(isSittingHash, false);
+            // allowSitting = false;
+            isSitting = false;
+        }
+    }
 
+    void onSit(InputAction.CallbackContext context){
+        isSittingPressed = context.ReadValueAsButton();
+    }
     void onJump(InputAction.CallbackContext context){
         isJumpPressed = context.ReadValueAsButton();
         // Debug.Log(isJumpPressed);
@@ -133,7 +162,7 @@ public class AnimationAndMovementController : MonoBehaviour
         Quaternion currentRotation = transform.rotation;
 
         // cria uma nova rotacao baseado em que posicao o usuario comanda para ele ir
-        if(isMovementPressed){
+        if(isMovementPressed && !isSitting){
             Quaternion targetRotation = Quaternion.LookRotation(positionToLookAt);
             transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, rotationFactorPerFrame * Time.deltaTime);
         }
@@ -156,32 +185,34 @@ public class AnimationAndMovementController : MonoBehaviour
         bool isWalking = animator.GetBool(isWalkingHash);
         bool isRunning = animator.GetBool(isRunningHash);
         bool isPushing = animator.GetBool(isPushingHash);
-
         // Setar aqui o colisor aqui - Precisa do colisor pra empurrar algo
+        if(!isSitting){
+            animator.SetBool(isSittingHash, false);
 
-        if(isPushPressed && !isPushing){
-            animator.SetBool(isPushingHash, true);
-            animator.SetBool(isRunningHash, false);
-        }
+            if(isPushPressed && !isPushing){
+                animator.SetBool(isPushingHash, true);
+                animator.SetBool(isRunningHash, false);
+            }
 
-        else if(!isPushPressed && isPushing){
-            animator.SetBool(isPushingHash, false);
-        }
+            else if(!isPushPressed && isPushing){
+                animator.SetBool(isPushingHash, false);
+            }
 
-        if(isMovementPressed && !isWalking){
-            animator.SetBool(isWalkingHash, true);
-        }
+            if(isMovementPressed && !isWalking){
+                animator.SetBool(isWalkingHash, true);
+            }
 
-        else if(!isMovementPressed && isWalking){
-            animator.SetBool(isWalkingHash, false);
-        }
-        
-        if((!isPushPressed && isMovementPressed && isRunPressed) && !isRunning){
-            animator.SetBool(isRunningHash, true);
-        }
+            else if(!isMovementPressed && isWalking){
+                animator.SetBool(isWalkingHash, false);
+            }
+            
+            if((!isPushPressed && isMovementPressed && isRunPressed) && !isRunning){
+                animator.SetBool(isRunningHash, true);
+            }
 
-        else if((isPushPressed || !isMovementPressed || !isRunPressed) && isRunning){
-            animator.SetBool(isRunningHash, false);
+            else if((isPushPressed || !isMovementPressed || !isRunPressed) && isRunning){
+                animator.SetBool(isRunningHash, false);
+            }
         }
     }
     
@@ -193,7 +224,7 @@ public class AnimationAndMovementController : MonoBehaviour
         float previousYVelocity;
         float newYVelocity;
         float nextYVelocity;
-
+        
         if(characterController.isGrounded){
             if(isJumpAnimating){
                 animator.SetBool(isJumpingHash, false);
@@ -202,8 +233,7 @@ public class AnimationAndMovementController : MonoBehaviour
             currentMovement.y = groundedGravity;
             currentRunMovement.y = groundedGravity;
         }
-        else if (isFalling){
-            
+        else if (isFalling){   
             previousYVelocity = currentMovement.y;
             newYVelocity = currentMovement.y + (gravity * fallMultiplier * Time.deltaTime);
             nextYVelocity = (previousYVelocity + newYVelocity) * .5f;
@@ -249,47 +279,65 @@ public class AnimationAndMovementController : MonoBehaviour
         }
     }
     // Update is called once per frame
+    void OnTriggerStay(Collider other){
+        string nome = other.name;
+        Debug.Log(nome);
+        if(nome == "InternalSphereJosephus"){
+            allowSitting = true;
+            // Rigidbody rigid = other.GetComponent<Rigidbody>();
+            // var pai = rigid.transform.parent;
+            // numero = pai.GetComponent<Node_>().valor; 
+            // rigid.AddForce(Vector3.up * hoverForce, ForceMode.Acceleration);
+            // Dentro = true;
+            // time = 0;
+        }
+        
+    }
     void Update()
     {
+        if(contSit < limite)contSit++;
+        if(contStand < limite)contStand++;
         handleRotation();
         handleAnimation();
         // Drop();
-
         _cameraRelativeMovement = ConvertToCameraSpace(currentMovement);
         _cameraRelativeRunMovement = ConvertToCameraSpace(currentRunMovement);
-        
-        if(isPushPressed){
-            if(heldObj == null){
-                // RaycastHit hit;
-                
-                Ray PickupRay = new Ray(PlayerCamera.transform.position, PlayerCamera.transform.forward);
+    
+        if(!isSitting){
+            if(isPushPressed){
+                if(heldObj == null){
+                    // RaycastHit hit;
+                    
+                    Ray PickupRay = new Ray(PlayerCamera.transform.position, PlayerCamera.transform.forward);
 
-                if(Physics.Raycast(PickupRay, out RaycastHit hitInfo, PickupRange, PickupLayer)){
-                    // Vector3 moveDirection = (holdArea.position - hit.transform.gameObject.transform.position);
-                    // if(moveDirection.y <= 0.02f) 
-                    PickupObject(hitInfo.transform.gameObject);
-                }     
-            } 
+                    if(Physics.Raycast(PickupRay, out RaycastHit hitInfo, PickupRange, PickupLayer)){
+                        // Vector3 moveDirection = (holdArea.position - hit.transform.gameObject.transform.position);
+                        // if(moveDirection.y <= 0.02f) 
+                        PickupObject(hitInfo.transform.gameObject);
+                    }     
+                } 
+                else{
+                    MoveObject();
+                }
+            }
             else{
-                MoveObject();
+                if(heldObj != null){
+                    DropObject();
+                }
+            }
+
+            
+            if(isRunPressed && !isPushPressed){
+                characterController.Move(_cameraRelativeRunMovement * Time.deltaTime);
+            }
+            else{
+                characterController.Move(_cameraRelativeMovement * Time.deltaTime);
             }
         }
-        else{
-            if(heldObj != null){
-                DropObject();
-            }
-        }
-
-        
-        if(isRunPressed && !isPushPressed){
-            characterController.Move(_cameraRelativeRunMovement * Time.deltaTime);
-        }
-        else{
-            characterController.Move(_cameraRelativeMovement * Time.deltaTime);
-        }
-
         handleGravity();
         handleJump();
+        handleSit();
+        allowSitting = false;
     }
 
 
