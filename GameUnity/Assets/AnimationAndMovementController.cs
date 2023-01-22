@@ -43,6 +43,8 @@ public class AnimationAndMovementController : MonoBehaviour
     bool isSitting = false;
     bool isJumpAnimating = false;
     bool allowSitting = false;
+    bool allowStandUp = false;
+    bool isDead = false;
     // Gravidade
     float gravity = -9.8f;
     float groundedGravity = -.05f;
@@ -60,7 +62,7 @@ public class AnimationAndMovementController : MonoBehaviour
     private GameObject heldObj;
     private Rigidbody heldObjRB;
     private Collider ColliderHeldObj;
-    private GameObject WhereIsSitting;
+    private GameObject WhereIsInside;
 
     [Header("Physics Parameters")]
     [SerializeField] private float PickupRange = 1.2f;
@@ -97,9 +99,7 @@ public class AnimationAndMovementController : MonoBehaviour
         playerInput.CharacterControls.SitDown.started += onSit;
         playerInput.CharacterControls.SitDown.performed += onSit;
         playerInput.CharacterControls.SitDown.canceled += onSit;
-        // if(Input.GetKeyDown(KeyCode.Q)){
-        //     Debug.Log("Apertou");
-        // }
+
 
         setupJumpVariables();
     }
@@ -130,11 +130,13 @@ public class AnimationAndMovementController : MonoBehaviour
             contSit = 0;
             animator.SetBool(isSittingHash, true);
             isSitting = true;
-            // SphereClone.SendMessage("getVal", valor,SendMessageOptions.DontRequireReceiver);
+            WhereIsInside.SendMessage("SitHere", true, SendMessageOptions.DontRequireReceiver);
+            
         }
-        else if(contSit == limite && isSitting && isSittingPressed){
+        else if(allowStandUp && contSit == limite && isSitting && isSittingPressed){
             contStand = 0;
             animator.SetBool(isSittingHash, false);
+            WhereIsInside.SendMessage("SitHere", false, SendMessageOptions.DontRequireReceiver);
             // allowSitting = false;
             isSitting = false;
         }
@@ -258,7 +260,7 @@ public class AnimationAndMovementController : MonoBehaviour
     void PickupObject(GameObject pickObj){
         if(pickObj.GetComponent<Rigidbody>()){
             heldObjRB = pickObj.GetComponent<Rigidbody>();
-            // ColliderHeldObj = pickObj.GetComponent<Collider>();
+           
             heldObjRB.isKinematic = true;
             heldObjRB.drag = 10;
             heldObjRB.transform.root.parent = holdArea;
@@ -268,10 +270,10 @@ public class AnimationAndMovementController : MonoBehaviour
     void DropObject(){
         heldObjRB.isKinematic = false;
         heldObjRB.drag = 1;
-        // heldObjRB.contraints = RigidbodyConstraints.None;
+     
         Transform t = transform.Find("Ghost");
         t = t.GetChild(0);
-        // Debug.Log(t);
+     
         t.parent = null;
         heldObj = null;
     }
@@ -279,7 +281,7 @@ public class AnimationAndMovementController : MonoBehaviour
     void MoveObject(){
         if(Vector3.Distance(heldObj.transform.position, holdArea.position) > 0.1f){
             Vector3 moveDirection = (holdArea.position - heldObj.transform.position);
-            // Debug.Log(moveDirection);
+         
             heldObjRB.AddForce(moveDirection*forceMagnitude);
         }
     }
@@ -287,62 +289,68 @@ public class AnimationAndMovementController : MonoBehaviour
     void OnTriggerStay(Collider other){
         string nome = other.name;
         if(nome == "InternalSphereJosephus"){
-            // WhereIsSitting = other;
+            WhereIsInside = other.gameObject;
             allowSitting = true;
-            // Rigidbody rigid = other.GetComponent<Rigidbody>();
-            // var pai = rigid.transform.parent;
-            // numero = pai.GetComponent<Node_>().valor; 
-            // rigid.AddForce(Vector3.up * hoverForce, ForceMode.Acceleration);
-            // Dentro = true;
-            // time = 0;
+            WhereIsInside.SendMessage("IsInside", true, SendMessageOptions.DontRequireReceiver);
+            
         }
-        
+    }
+    void OnTriggerExit(Collider other){
+        string nome = other.name;
+        if(nome == "InternalSphereJosephus"){
+            WhereIsInside = other.gameObject;
+          
+            WhereIsInside.SendMessage("IsInside", false, SendMessageOptions.DontRequireReceiver);
+         
+        }
     }
     void Update()
     {
-        if(contSit < limite)contSit++;
-        if(contStand < limite)contStand++;
-        handleRotation();
-        handleAnimation();
-        // Drop();
-        _cameraRelativeMovement = ConvertToCameraSpace(currentMovement);
-        _cameraRelativeRunMovement = ConvertToCameraSpace(currentRunMovement);
-    
-        if(!isSitting){
-            if(isPushPressed){
-                if(heldObj == null){
-                    // RaycastHit hit;
-                    
-                    Ray PickupRay = new Ray(PlayerCamera.transform.position, PlayerCamera.transform.forward);
+        if(!isDead){
+            if(contSit < limite)contSit++;
+            if(contStand < limite)contStand++;
+            handleRotation();
+            handleAnimation();
+            // Drop();
+            _cameraRelativeMovement = ConvertToCameraSpace(currentMovement);
+            _cameraRelativeRunMovement = ConvertToCameraSpace(currentRunMovement);
+        
+            if(!isSitting){
+                if(isPushPressed){
+                    if(heldObj == null){
+                        // RaycastHit hit;
+                        
+                        Ray PickupRay = new Ray(PlayerCamera.transform.position, PlayerCamera.transform.forward);
 
-                    if(Physics.Raycast(PickupRay, out RaycastHit hitInfo, PickupRange, PickupLayer)){
-                        // Vector3 moveDirection = (holdArea.position - hit.transform.gameObject.transform.position);
-                        // if(moveDirection.y <= 0.02f) 
-                        PickupObject(hitInfo.transform.gameObject);
-                    }     
-                } 
+                        if(Physics.Raycast(PickupRay, out RaycastHit hitInfo, PickupRange, PickupLayer)){
+                            // Vector3 moveDirection = (holdArea.position - hit.transform.gameObject.transform.position);
+                            // if(moveDirection.y <= 0.02f) 
+                            PickupObject(hitInfo.transform.gameObject);
+                        }     
+                    } 
+                    else{
+                        MoveObject();
+                    }
+                }
                 else{
-                    MoveObject();
+                    if(heldObj != null){
+                        DropObject();
+                    }
                 }
-            }
-            else{
-                if(heldObj != null){
-                    DropObject();
-                }
-            }
 
-            
-            if(isRunPressed && !isPushPressed){
-                characterController.Move(_cameraRelativeRunMovement * Time.deltaTime);
+                
+                if(isRunPressed && !isPushPressed){
+                    characterController.Move(_cameraRelativeRunMovement * Time.deltaTime);
+                }
+                else{
+                    characterController.Move(_cameraRelativeMovement * Time.deltaTime);
+                }
             }
-            else{
-                characterController.Move(_cameraRelativeMovement * Time.deltaTime);
-            }
+            handleGravity();
+            handleJump();
+            handleSit();
+            allowSitting = false;
         }
-        handleGravity();
-        handleJump();
-        handleSit();
-        allowSitting = false;
     }
 
 
@@ -379,6 +387,16 @@ public class AnimationAndMovementController : MonoBehaviour
     }
     void OnDisable(){
         playerInput.CharacterControls.Disable();
+    }
+
+    void StandUp(bool flag){
+        allowStandUp = flag;
+        // Debug.Log(flag);
+    }
+    void Death(bool flag){
+        isDead = flag;
+        Debug.Log(isDead);
+        animator.SetBool("isDead", true);
     }
 }
 

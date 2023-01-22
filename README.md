@@ -11,3 +11,6 @@ git clean -f -d .
 
 Depois:
 git restore .
+
+Adicionar GitIgnore
+git rm -r --cached .
