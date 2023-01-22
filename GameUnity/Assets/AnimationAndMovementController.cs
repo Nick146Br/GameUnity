@@ -17,7 +17,7 @@ public class AnimationAndMovementController : MonoBehaviour
     int isSittingHash;
     int contSit = 0;
     int contStand = 0;
-    int limite = 20;
+    int limite = 25;
     //Variaveis para comparar os valores do input com os valores do player
     Vector2 currentMovementInput;
     Vector3 currentMovement;
@@ -60,6 +60,7 @@ public class AnimationAndMovementController : MonoBehaviour
     private GameObject heldObj;
     private Rigidbody heldObjRB;
     private Collider ColliderHeldObj;
+    private GameObject WhereIsSitting;
 
     [Header("Physics Parameters")]
     [SerializeField] private float PickupRange = 1.2f;
@@ -126,6 +127,7 @@ public class AnimationAndMovementController : MonoBehaviour
             contSit = 0;
             animator.SetBool(isSittingHash, true);
             isSitting = true;
+            SphereClone.SendMessage("getVal", valor,SendMessageOptions.DontRequireReceiver);
         }
         else if(contSit == limite && isSitting && isSittingPressed){
             contStand = 0;
@@ -281,8 +283,8 @@ public class AnimationAndMovementController : MonoBehaviour
     // Update is called once per frame
     void OnTriggerStay(Collider other){
         string nome = other.name;
-        Debug.Log(nome);
         if(nome == "InternalSphereJosephus"){
+            WhereIsSitting = other;
             allowSitting = true;
             // Rigidbody rigid = other.GetComponent<Rigidbody>();
             // var pai = rigid.transform.parent;
