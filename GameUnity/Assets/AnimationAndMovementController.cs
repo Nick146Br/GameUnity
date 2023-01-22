@@ -97,6 +97,9 @@ public class AnimationAndMovementController : MonoBehaviour
         playerInput.CharacterControls.SitDown.started += onSit;
         playerInput.CharacterControls.SitDown.performed += onSit;
         playerInput.CharacterControls.SitDown.canceled += onSit;
+        // if(Input.GetKeyDown(KeyCode.Q)){
+        //     Debug.Log("Apertou");
+        // }
 
         setupJumpVariables();
     }
@@ -127,7 +130,7 @@ public class AnimationAndMovementController : MonoBehaviour
             contSit = 0;
             animator.SetBool(isSittingHash, true);
             isSitting = true;
-            SphereClone.SendMessage("getVal", valor,SendMessageOptions.DontRequireReceiver);
+            // SphereClone.SendMessage("getVal", valor,SendMessageOptions.DontRequireReceiver);
         }
         else if(contSit == limite && isSitting && isSittingPressed){
             contStand = 0;
@@ -284,7 +287,7 @@ public class AnimationAndMovementController : MonoBehaviour
     void OnTriggerStay(Collider other){
         string nome = other.name;
         if(nome == "InternalSphereJosephus"){
-            WhereIsSitting = other;
+            // WhereIsSitting = other;
             allowSitting = true;
             // Rigidbody rigid = other.GetComponent<Rigidbody>();
             // var pai = rigid.transform.parent;

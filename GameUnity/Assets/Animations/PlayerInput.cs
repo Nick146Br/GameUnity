@@ -166,7 +166,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""f7ba9fb5-fd7f-4740-afd7-c6b295e925fb"",
                     ""path"": ""<Keyboard>/q"",
-                    ""interactions"": ""Tap"",
+                    ""interactions"": ""Tap(duration=0.03,pressPoint=1.401298E-45)"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""SitDown"",
