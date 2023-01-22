@@ -36,7 +36,7 @@ public class Dot_Dad : MonoBehaviour
         if(dad.childCount >= index*2 + 1){
             var child_2 = dad.transform.GetChild((index*2));
             // Debug.Log("Pai" + index.ToString() +"=" +  child_2.GetComponent<Dot_Dad>().index.ToString());
-            lineRenderer.SetVertexCount(3);
+            lineRenderer.positionCount = 3;
             lineRenderer.SetPosition(2, child_2.transform.position);
             
             var Tree = child_2.GetChild(0).GetChild(1);

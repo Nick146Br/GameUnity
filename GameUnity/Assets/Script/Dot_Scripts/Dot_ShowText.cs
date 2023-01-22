@@ -8,7 +8,7 @@ public class Dot_ShowText : MonoBehaviour
     private int index =0;
     private int valor=0;
     private bool verifica_sub;
-    private float height = -0.5f;
+    // private float height = -0.5f;
     // Start is called before the first frame update
     void Start()
     {

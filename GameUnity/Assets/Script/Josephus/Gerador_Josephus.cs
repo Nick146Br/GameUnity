@@ -5,8 +5,8 @@ using UnityEngine;
 public class Gerador_Josephus : MonoBehaviour
 {
     public GameObject Ponto;
-    float InicioY = 0.0f;
-    float InicioX = 0.0f;
+    // float InicioY = 0.0f;
+    // float InicioX = 0.0f;
 
     // Start is called before the first frame update
     void Start(){

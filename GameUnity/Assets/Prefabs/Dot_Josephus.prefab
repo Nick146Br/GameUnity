@@ -135,7 +135,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5164090571065228254, guid: 3e9deb5eda6f1f740878deea2d954a88, type: 3}
       propertyPath: m_Name
-      value: InternalSphere
+      value: InternalSphereJosephus
       objectReference: {fileID: 0}
     - target: {fileID: 5164090571065228255, guid: 3e9deb5eda6f1f740878deea2d954a88, type: 3}
       propertyPath: m_LocalPosition.y
@@ -143,7 +143,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5164090571110374776, guid: 3e9deb5eda6f1f740878deea2d954a88, type: 3}
       propertyPath: m_Name
-      value: ExternalSphere
+      value: ExternalSphereJosephus
       objectReference: {fileID: 0}
     - target: {fileID: 5164090571110374777, guid: 3e9deb5eda6f1f740878deea2d954a88, type: 3}
       propertyPath: m_LocalPosition.y
