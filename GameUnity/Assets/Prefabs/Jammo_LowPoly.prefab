@@ -381,7 +381,7 @@ GameObject:
   - component: {fileID: 7103747695816506449}
   m_Layer: 0
   m_Name: Jammo_LowPoly
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -480,7 +480,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxJumpHeight: 4
-  maxJumpTime: 0.6
+  maxJumpTime: 1
   runMultiplier: 7
   walkMultiplier: 5
   holdArea: {fileID: 7103747695151675371}
