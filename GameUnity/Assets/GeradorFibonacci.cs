@@ -25,7 +25,7 @@ public class GeradorFibonacci : MonoBehaviour
             fib.Add(fib[i-1] + fib[i-2]);
             dic.Add(fib[i], true);
         }
-        int lin = UnityEngine.Random.Range(11, 11), col = UnityEngine.Random.Range(4, 6);
+        int lin = UnityEngine.Random.Range(11, 12), col = UnityEngine.Random.Range(4, 7);
 
         M = new List<List<int>> ();
 
@@ -98,7 +98,7 @@ public class GeradorFibonacci : MonoBehaviour
         for(int i = 1; i < lin; i++){
             if(aleat == col-1) aleat = col-2;
             else if(aleat == 0) aleat = 1;
-            else aleat = UnityEngine.Random.Range(aleat-1, aleat+1);
+            else aleat = UnityEngine.Random.Range(aleat-1, aleat+2);
             if(aleat<0)aleat = 0;
             if(aleat>col-1)aleat = col-1;
             M[i][aleat] = fib[i];
@@ -107,7 +107,7 @@ public class GeradorFibonacci : MonoBehaviour
         for(int i = 0; i < lin; i++){
             posz = 8.0f;
             for(int j = 0; j < col; j++){   
-                if(M[i][j] == -1)aleat = UnityEngine.Random.Range(2, 50);
+                if(M[i][j] == -1)aleat = UnityEngine.Random.Range(2, 90);
                 else aleat = M[i][j];
                 GameObject newPlatform = Instantiate(PlatformType, new Vector3(posx + 32.0f, PlatformType.transform.position.y, posz + startz), PlatformType.transform.rotation);
                 newPlatform.transform.GetChild(0).GetComponent<TextMeshPro>().SetText(aleat.ToString());
