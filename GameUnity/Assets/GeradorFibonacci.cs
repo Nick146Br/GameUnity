@@ -10,6 +10,7 @@ public class GeradorFibonacci : MonoBehaviour
     public Material Correct;
     public Material Wrong;
     public Material Original;
+    public GameObject Part2Scenario;
     List<List<int>> M;
     // int timeBetween = 1000;
     // float InicioY = 0.0f;
@@ -117,6 +118,8 @@ public class GeradorFibonacci : MonoBehaviour
             }
             posx += kx;
         }
+        GameObject newPart2 = Instantiate(Part2Scenario, new Vector3(posx -4.0f + 32.0f + 15.0f, Part2Scenario.transform.position.y, 0.0f), Part2Scenario.transform.rotation);
+        newPart2.transform.parent = transform;
     }
     // void Begin(List<int> arr){
         

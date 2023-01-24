@@ -11,14 +11,15 @@ public class Gerador_Josephus : MonoBehaviour
     int ChildThePlayerIs;
     [Header("JosephusAlgorithm")]
     [SerializeField] int JosephusJump = 3;
-    int SizeOfCircle = 7;
+    int SizeOfCircle; 
     // int timeBetween = 1000;
     // float InicioY = 0.0f;
     // float InicioX = 0.0f;
 
     // Start is called before the first frame update
     void Start(){
-        int num = SizeOfCircle;
+        int num = UnityEngine.Random.Range(4, 10);
+        SizeOfCircle = num;
         Create(num);
     }
 
