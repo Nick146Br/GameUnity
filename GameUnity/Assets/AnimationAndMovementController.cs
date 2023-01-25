@@ -54,19 +54,17 @@ public class AnimationAndMovementController : MonoBehaviour
     [SerializeField] private float runMultiplier = 7.0f;
     [SerializeField] private float walkMultiplier = 5.0f;
 
-    
-    [Header("Pickup Settings")]
-    [SerializeField] Transform holdArea;
+    // PickUp Settings
+    // [Header("Pickup Settings")]
+    [SerializeField] private LayerMask PickupMask;
     [SerializeField] private Camera PlayerCamera;
-    [SerializeField] private LayerMask PickupLayer;
-    private GameObject heldObj;
-    private Rigidbody heldObjRB;
-    private Collider ColliderHeldObj;
-    private GameObject WhereIsInside;
+    [SerializeField] private Transform PickupTarget;
+    [Space]
+    [SerializeField] private float PickupRange;
+    private Rigidbody CurrentObject;
+    
 
-    [Header("Physics Parameters")]
-    [SerializeField] private float PickupRange = 1.2f;
-    [SerializeField] private float forceMagnitude = 150.0f;
+    private GameObject WhereIsInside;
 
     void Awake(){
         
@@ -257,34 +255,19 @@ public class AnimationAndMovementController : MonoBehaviour
         }
     }
 
-    void PickupObject(GameObject pickObj){
-        if(pickObj.GetComponent<Rigidbody>()){
-            heldObjRB = pickObj.GetComponent<Rigidbody>();
-           
-            heldObjRB.isKinematic = true;
-            heldObjRB.drag = 10;
-            heldObjRB.transform.root.parent = holdArea;
-            heldObj = pickObj;
-        }
-    }
-    void DropObject(){
-        heldObjRB.isKinematic = false;
-        heldObjRB.drag = 1;
-     
-        Transform t = transform.Find("Ghost");
-        t = t.GetChild(0);
-     
-        t.parent = null;
-        heldObj = null;
-    }
+    // private void OnControllerColliderHit(ControllerColliderHit hit){
+    //     if(hit.collider.CompareTag("Push") && isPushPressed && !isSitting){
+    //         Rigidbody rb = hit.collider.GetComponent<Rigidbody>();
+    //         if(rb != null){
+    //             Debug.Log(true);
+    //             Vector3 direction = hit.gameObject.transform.position - this.transform.position;
+    //             direction.y = 0;
+    //             direction.Normalize();
+    //             rb.AddForceAtPosition(direction*power, transform.position, ForceMode.Impulse);
+    //         }
+    //     }
+    // }
 
-    void MoveObject(){
-        if(Vector3.Distance(heldObj.transform.position, holdArea.position) > 0.1f){
-            Vector3 moveDirection = (holdArea.position - heldObj.transform.position);
-         
-            heldObjRB.AddForce(moveDirection*forceMagnitude);
-        }
-    }
     // Update is called once per frame
     void OnTriggerStay(Collider other){
         string nome = other.name;
@@ -304,6 +287,7 @@ public class AnimationAndMovementController : MonoBehaviour
          
         }
     }
+    
     void Update()
     {
         if(!isDead){
@@ -317,28 +301,19 @@ public class AnimationAndMovementController : MonoBehaviour
         
             if(!isSitting){
                 if(isPushPressed){
-                    if(heldObj == null){
-                        // RaycastHit hit;
-                        
-                        Ray PickupRay = new Ray(PlayerCamera.transform.position, PlayerCamera.transform.forward);
-
-                        if(Physics.Raycast(PickupRay, out RaycastHit hitInfo, PickupRange, PickupLayer)){
-                            // Vector3 moveDirection = (holdArea.position - hit.transform.gameObject.transform.position);
-                            // if(moveDirection.y <= 0.02f) 
-                            PickupObject(hitInfo.transform.gameObject);
-                        }     
-                    } 
-                    else{
-                        MoveObject();
+                    Ray CameraRay = PlayerCamera.ViewportPointToRay(new Vector3(0.8f, 0.8f, 0f));
+                    if(Physics.Raycast(CameraRay, out RaycastHit HitInfo, PickupRange, PickupMask)){
+                        CurrentObject = HitInfo.rigidbody;
+                        CurrentObject.useGravity = false;
                     }
                 }
                 else{
-                    if(heldObj != null){
-                        DropObject();
+                    if(CurrentObject){
+                        CurrentObject.useGravity = true;
+                        CurrentObject = null;
+                        // return;
                     }
                 }
-
-                
                 if(isRunPressed && !isPushPressed){
                     characterController.Move(_cameraRelativeRunMovement * Time.deltaTime);
                 }
@@ -353,6 +328,15 @@ public class AnimationAndMovementController : MonoBehaviour
         }
     }
 
+    void FixedUpdate(){
+        if(CurrentObject){
+            Vector3 DirectionToPoint = PickupTarget.position - CurrentObject.position;
+            float DistanceToPoint = DirectionToPoint.magnitude;
+
+            CurrentObject.velocity = DirectionToPoint * 12f * DistanceToPoint;
+            
+        }
+    }
 
     Vector3 ConvertToCameraSpace(Vector3 vectorToRotate)
     {

@@ -52,7 +52,7 @@ public class Gerador_Dot : MonoBehaviour
         if(accepted==true){
             Debug.Log("Accepted!");
         }else{
-            Debug.Log("WA!");
+            // Debug.Log("WA!");
         }
         
         
