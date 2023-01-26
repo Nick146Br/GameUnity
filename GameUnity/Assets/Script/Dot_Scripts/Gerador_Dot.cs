@@ -123,8 +123,8 @@ public class Gerador_Dot : MonoBehaviour
 
     void createDots(int qtd){
         for(int i=1;i<=qtd;i++){
-            Debug.Log(posicaoX[i]);
-            Debug.Log(posicaoY[i]);
+            // Debug.Log(posicaoX[i]);
+            // Debug.Log(posicaoY[i]);
             GameObject DotClone = Instantiate(DotOriginal, new Vector3(posicaoY[i]+InicioY, DotOriginal.transform.position.y, posicaoX[i]), DotOriginal.transform.rotation);
             DotClone.transform.parent = transform;
             // GameObject SphereClone = Instantiate(SphereOriginal, new Vector3(posicaoY[i]+InicioY, SphereOriginal.transform.position.y, posicaoX[i]), SphereOriginal.transform.rotation);

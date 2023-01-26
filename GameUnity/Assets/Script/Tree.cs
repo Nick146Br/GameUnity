@@ -7,7 +7,9 @@ public class Tree : MonoBehaviour
     public float hoverForce = 12.0f;
     public int numero = -1;
     public int time = 0;
-    [SerializeField] public Material newMaterial;
+    bool isCorrect = false;
+    public Material CorrectMaterial;
+    public Material IncorrectMaterial;
     Material oldMaterial;
 
     void OnTriggerStay(Collider other){
@@ -41,10 +43,17 @@ public class Tree : MonoBehaviour
     {
         MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
         if(numero == -1) meshRenderer.material = oldMaterial;
-        else meshRenderer.material = newMaterial;
-        if(time == 90) numero = -1;  
+        else{
+            if(isCorrect) meshRenderer.material = CorrectMaterial;
+            else meshRenderer.material = IncorrectMaterial;
+        }
+        if(time == 30) numero = -1;  
         time += 1;
 
         
+    }
+    void Correct(bool flag){
+        // Debug.Log(true);
+        isCorrect = flag;
     }
 }

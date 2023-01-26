@@ -48,9 +48,7 @@ public class Dot_Dad : MonoBehaviour
             }
                 filhos++;
         }
-        if(((contador == filhos && verifica) || filhos == 0) && valor != -1){
-            verifica_sub = true;
-        }
+        verifica_sub = false;
         
         // if(verifica==true){
         //     transform.position = this.transform.position + new Vector3(0,3f,0);
@@ -98,7 +96,11 @@ public class Dot_Dad : MonoBehaviour
         }
         if(((contador == filhos && verifica) || filhos == 0) && valor != -1){
             verifica_sub = true;
+            transform.GetChild(0).GetChild(1).gameObject.SendMessage("Correct", true, SendMessageOptions.DontRequireReceiver);
         }else{
+            if(valor != -1){
+                transform.GetChild(0).GetChild(1).gameObject.SendMessage("Correct", false, SendMessageOptions.DontRequireReceiver);
+            }
             verifica_sub = false;
         }
         // Debug.Log(verifica_sub);
