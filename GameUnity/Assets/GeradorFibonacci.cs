@@ -50,51 +50,13 @@ public class GeradorFibonacci : MonoBehaviour
         // }
     }
 
-    // IEnumerator Coroutine(){
-    //     bool flagInterna = false;
-    //     Transform t = transform.GetChild(0);;
-    //     int pos = 0;
-    //     int tot = SizeOfCircle;
-    //     for(int i = 1; i < SizeOfCircle; i++){
-    //         pos--;
-    //         for(int j = 1; j <= JosephusJump; j++){
-    //             pos++;
-    //             pos %= tot;
-                
-    //             t = transform.GetChild(pos);
-    //             MeshRenderer meshRenderer = t.GetChild(2).GetComponent<MeshRenderer>();
-    //             meshRenderer.enabled = true;
-    //             OldColor = meshRenderer.material;
-    //             if(j == JosephusJump){
-    //                 yield return new WaitForSeconds(1);
-    //                 meshRenderer.material = PointColor;
-    //                 yield return new WaitForSeconds(1);
-    //             }
-    //             else yield return new WaitForSeconds(1);
-                
-    //             meshRenderer.enabled = false;
-    //             meshRenderer.material = OldColor;
-    //         }
-    //         if(ChildThePlayerIs == pos){
-    //             transform.GetChild(ChildThePlayerIs).GetChild(0).GetChild(1).gameObject.SendMessage("allowToStand", false, SendMessageOptions.DontRequireReceiver);
-    //             flagInterna = true;
-    //             break;
-    //         }
-    //         if(ChildThePlayerIs > pos)ChildThePlayerIs--;
-    //         t.GetChild(0).GetChild(1).gameObject.SendMessage("Deactivate", true, SendMessageOptions.DontRequireReceiver);
-    //         t.parent = null;
-    //         tot--;
-    //     }
-    //     if(!flagInterna)transform.GetChild(0).GetChild(0).GetChild(1).gameObject.SendMessage("allowToStand", true, SendMessageOptions.DontRequireReceiver);
-        
-    // }
     void Create(int lin, int col){
         // float angulo = 360.0f/(float)num;
         // // Debug.Log(transform.position.y);
         // Vector3 vec = new Vector3(20.0f, 0.0f, 0.0f);
         float posx = 0.0f, posz = 0.0f, kx = 8.0f, kz = 8.0f, startz = -4.0f*(col + 1);
         
-        int aleat = UnityEngine.Random.Range(0, col-1);
+        int aleat = UnityEngine.Random.Range(0, col);
         M[0][aleat] = 1;
         for(int i = 1; i < lin; i++){
             if(aleat == col-1) aleat = col-2;

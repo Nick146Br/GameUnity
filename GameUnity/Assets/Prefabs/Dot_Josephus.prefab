@@ -172,7 +172,10 @@ MonoBehaviour:
   hoverForce: 12
   numero: -1
   time: 0
-  newMaterial: {fileID: 2100000, guid: 804df66d50d065f46b8e1052cd2d68da, type: 2}
+  newMaterial1: {fileID: 0}
+  newMaterial2: {fileID: 0}
+  DeactivateMaterial1: {fileID: 0}
+  DeactivateMaterial2: {fileID: 0}
 --- !u!4 &8254330121083273629 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5164090570998302363, guid: 3e9deb5eda6f1f740878deea2d954a88, type: 3}

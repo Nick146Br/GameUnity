@@ -22,7 +22,7 @@ public class Plataforma : MonoBehaviour
     void OnTriggerStay(Collider other){
 
         MeshRenderer m = transform.GetComponent<MeshRenderer>();
-        Debug.Log(other);
+        // Debug.Log(other);
         if(isInFib) m.material = Correct;
         else{ 
             m.material = Wrong;
@@ -32,7 +32,7 @@ public class Plataforma : MonoBehaviour
     }
 
     void SetNumero(bool flag){
-        Debug.Log(flag);
+        // Debug.Log(flag);
         isInFib = flag;
     }
 }

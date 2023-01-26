@@ -143,13 +143,13 @@ LineRenderer:
   - {x: 0, y: 0, z: 1}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 0.121187665
     widthCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 1
+        time: 0.73568726
+        value: 0.95121765
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -256,16 +256,24 @@ PrefabInstance:
       value: InternalSphere
       objectReference: {fileID: 0}
     - target: {fileID: 5164090571065228255, guid: 3e9deb5eda6f1f740878deea2d954a88, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 5164090571065228255, guid: 3e9deb5eda6f1f740878deea2d954a88, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.005
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 5164090571110374776, guid: 3e9deb5eda6f1f740878deea2d954a88, type: 3}
       propertyPath: m_Name
       value: ExternalSphere
       objectReference: {fileID: 0}
     - target: {fileID: 5164090571110374777, guid: 3e9deb5eda6f1f740878deea2d954a88, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.12
+      objectReference: {fileID: 0}
+    - target: {fileID: 5164090571110374777, guid: 3e9deb5eda6f1f740878deea2d954a88, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.004
+      value: 0.02
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3e9deb5eda6f1f740878deea2d954a88, type: 3}

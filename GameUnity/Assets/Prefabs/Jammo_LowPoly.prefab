@@ -481,15 +481,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxJumpHeight: 4
   maxJumpTime: 1
+  isDead: 0
   runMultiplier: 7
   walkMultiplier: 5
   holdArea: {fileID: 7103747695151675371}
   PlayerCamera: {fileID: 7103747695846557353}
   PickupLayer:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 0
   PickupRange: 0.7
-  forceMagnitude: 1
+  forceMagnitude: 150
 --- !u!1 &1599975806240739567
 GameObject:
   m_ObjectHideFlags: 0
@@ -4273,14 +4274,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7103747695151675380}
-  m_LocalRotation: {x: -0, y: -0, z: -0.000000039790393, w: 1}
-  m_LocalPosition: {x: 0, y: 0.6, z: 0}
+  m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 1.3, z: 1.3300002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2877554055197157268}
   m_RootOrder: 26
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1 &7103747695846557354
 GameObject:
   m_ObjectHideFlags: 0

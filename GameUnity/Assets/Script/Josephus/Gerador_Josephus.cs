@@ -7,6 +7,7 @@ public class Gerador_Josephus : MonoBehaviour
     [SerializeField] public Material PointColor;
     Material OldColor;
     public GameObject Ponto;
+    public GameObject Enemy;
     bool allowedToStart = false;
     int ChildThePlayerIs;
     [Header("JosephusAlgorithm")]
@@ -33,6 +34,20 @@ public class Gerador_Josephus : MonoBehaviour
     }
 
     void Josephus(){
+        Vector3 vec = new Vector3(20.0f, 0.0f, 0.0f);
+        float angulo = 360.0f/(float)SizeOfCircle;
+        for(int i = 1; i <= SizeOfCircle; i++){
+            if(ChildThePlayerIs == i-1){
+                vec = Quaternion.Euler(0, angulo, 0) * vec;
+                continue;
+            }
+            GameObject DotClone = Instantiate(Enemy, vec, Quaternion.Euler(0, 0, 0));
+            // Debug.Log(DotClone.transform.position.z);
+            DotClone.GetComponent<AnimationAndMovementController>().animator.SetBool("isSitting", true);
+            DotClone.transform.parent = transform.GetChild(i-1);
+            vec = Quaternion.Euler(0, angulo, 0) * vec;
+            // DotClone.SendMessage("getIndex", i,SendMessageOptions.DontRequireReceiver);
+        }
         StartCoroutine(Coroutine());
     }
     IEnumerator Coroutine(){
@@ -44,7 +59,7 @@ public class Gerador_Josephus : MonoBehaviour
             pos--;
             for(int j = 1; j <= JosephusJump; j++){
                 pos++;
-                pos %= tot;
+                if(pos == tot)pos %= tot;
                 
                 t = transform.GetChild(pos);
                 MeshRenderer meshRenderer = t.GetChild(2).GetComponent<MeshRenderer>();
@@ -53,6 +68,12 @@ public class Gerador_Josephus : MonoBehaviour
                 if(j == JosephusJump){
                     yield return new WaitForSeconds(1);
                     meshRenderer.material = PointColor;
+                    if(pos != ChildThePlayerIs) t.GetChild(3).GetComponent<AnimationAndMovementController>().animator.SetBool("isDead", true);
+                    else{
+                        transform.GetChild(ChildThePlayerIs).GetChild(0).GetChild(1).gameObject.SendMessage("allowToStand", false, SendMessageOptions.DontRequireReceiver);
+                        flagInterna = true;
+                        break;
+                    }
                     yield return new WaitForSeconds(1);
                 }
                 else yield return new WaitForSeconds(1);
@@ -60,11 +81,7 @@ public class Gerador_Josephus : MonoBehaviour
                 meshRenderer.enabled = false;
                 meshRenderer.material = OldColor;
             }
-            if(ChildThePlayerIs == pos){
-                transform.GetChild(ChildThePlayerIs).GetChild(0).GetChild(1).gameObject.SendMessage("allowToStand", false, SendMessageOptions.DontRequireReceiver);
-                flagInterna = true;
-                break;
-            }
+            if(flagInterna)break;
             if(ChildThePlayerIs > pos)ChildThePlayerIs--;
             t.GetChild(0).GetChild(1).gameObject.SendMessage("Deactivate", true, SendMessageOptions.DontRequireReceiver);
             t.parent = null;

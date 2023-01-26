@@ -8,8 +8,8 @@ public class AnimationAndMovementController : MonoBehaviour
     //Variaveis de Referencia
     PlayerInput playerInput;
     CharacterController characterController;
-    Animator animator;
-
+    public Animator animator;
+    float spawnValue = 30f;
     int isWalkingHash;
     int isRunningHash;
     int isPushingHash;
@@ -44,7 +44,7 @@ public class AnimationAndMovementController : MonoBehaviour
     bool isJumpAnimating = false;
     bool allowSitting = false;
     bool allowStandUp = false;
-    bool isDead = false;
+    public bool isDead = false;
     // Gravidade
     float gravity = -9.8f;
     float groundedGravity = -.05f;
@@ -56,12 +56,15 @@ public class AnimationAndMovementController : MonoBehaviour
 
     // PickUp Settings
     // [Header("Pickup Settings")]
-    [SerializeField] private LayerMask PickupMask;
+    [Header("Pickup Settings")]
+    [SerializeField] Transform holdArea;
     [SerializeField] private Camera PlayerCamera;
-    [SerializeField] private Transform PickupTarget;
-    [Space]
-    [SerializeField] private float PickupRange;
-    private Rigidbody CurrentObject;
+    [SerializeField] private LayerMask PickupLayer;
+    [SerializeField] private float PickupRange = 0.7f;
+    [SerializeField] private float forceMagnitude = 1f;
+    private GameObject heldObj;
+    private Rigidbody heldObjRB;
+    private Collider ColliderHeldObj;
     
 
     private GameObject WhereIsInside;
@@ -255,19 +258,34 @@ public class AnimationAndMovementController : MonoBehaviour
         }
     }
 
-    // private void OnControllerColliderHit(ControllerColliderHit hit){
-    //     if(hit.collider.CompareTag("Push") && isPushPressed && !isSitting){
-    //         Rigidbody rb = hit.collider.GetComponent<Rigidbody>();
-    //         if(rb != null){
-    //             Debug.Log(true);
-    //             Vector3 direction = hit.gameObject.transform.position - this.transform.position;
-    //             direction.y = 0;
-    //             direction.Normalize();
-    //             rb.AddForceAtPosition(direction*power, transform.position, ForceMode.Impulse);
-    //         }
-    //     }
-    // }
+    void PickupObject(GameObject pickObj){
+        if(pickObj.GetComponent<Rigidbody>()){
+            heldObjRB = pickObj.GetComponent<Rigidbody>();
+           
+            heldObjRB.isKinematic = true;
+            heldObjRB.drag = 10;
+            heldObjRB.transform.root.parent = holdArea;
+            heldObj = pickObj;
+        }
+    }
+    void DropObject(){
+        heldObjRB.isKinematic = false;
+        heldObjRB.drag = 1;
+     
+        Transform t = transform.Find("Ghost");
+        t = t.GetChild(0);
+     
+        t.parent = null;
+        heldObj = null;
+    }
 
+    void MoveObject(){
+        if(Vector3.Distance(heldObj.transform.position, holdArea.position) > 0.1f){
+            Vector3 moveDirection = (holdArea.position - heldObj.transform.position);
+         
+            heldObjRB.AddForce(moveDirection*forceMagnitude);
+        }
+    }
     // Update is called once per frame
     void OnTriggerStay(Collider other){
         string nome = other.name;
@@ -301,19 +319,27 @@ public class AnimationAndMovementController : MonoBehaviour
         
             if(!isSitting){
                 if(isPushPressed){
-                    Ray CameraRay = PlayerCamera.ViewportPointToRay(new Vector3(0.8f, 0.8f, 0f));
-                    if(Physics.Raycast(CameraRay, out RaycastHit HitInfo, PickupRange, PickupMask)){
-                        CurrentObject = HitInfo.rigidbody;
-                        CurrentObject.useGravity = false;
+                    if(heldObj == null){
+                        // RaycastHit hit;
+                        
+                        Ray PickupRay = new Ray(PlayerCamera.transform.position, PlayerCamera.transform.forward);
+
+                        if(Physics.Raycast(PickupRay, out RaycastHit hitInfo, PickupRange, PickupLayer)){
+                            // Vector3 moveDirection = (holdArea.position - hit.transform.gameObject.transform.position);
+                            // if(moveDirection.y <= 0.02f) 
+                            PickupObject(hitInfo.transform.gameObject);
+                        }     
+                    } 
+                    else{
+                        MoveObject();
                     }
                 }
                 else{
-                    if(CurrentObject){
-                        CurrentObject.useGravity = true;
-                        CurrentObject = null;
-                        // return;
+                    if(heldObj != null){
+                        DropObject();
                     }
                 }
+
                 if(isRunPressed && !isPushPressed){
                     characterController.Move(_cameraRelativeRunMovement * Time.deltaTime);
                 }
@@ -326,17 +352,23 @@ public class AnimationAndMovementController : MonoBehaviour
             handleSit();
             allowSitting = false;
         }
+        else animator.SetBool("isDead", true);
     }
-
-    void FixedUpdate(){
-        if(CurrentObject){
-            Vector3 DirectionToPoint = PickupTarget.position - CurrentObject.position;
-            float DistanceToPoint = DirectionToPoint.magnitude;
-
-            CurrentObject.velocity = DirectionToPoint * 12f * DistanceToPoint;
-            
+    void LateUpdate(){
+        if(transform.position.y < -spawnValue){
+            transform.position = new Vector3(0f, 40f, 0f);            
         }
     }
+
+    // void FixedUpdate(){
+    //     if(CurrentObject){
+    //         Vector3 DirectionToPoint = PickupTarget.position - CurrentObject.position;
+    //         float DistanceToPoint = DirectionToPoint.magnitude;
+
+    //         CurrentObject.velocity = DirectionToPoint * 12f * DistanceToPoint;
+            
+    //     }
+    // }
 
     Vector3 ConvertToCameraSpace(Vector3 vectorToRotate)
     {
@@ -379,8 +411,7 @@ public class AnimationAndMovementController : MonoBehaviour
     }
     void Death(bool flag){
         isDead = flag;
-        Debug.Log(isDead);
-        animator.SetBool("isDead", true);
+        // Debug.Log(isDead);
     }
 }
 
