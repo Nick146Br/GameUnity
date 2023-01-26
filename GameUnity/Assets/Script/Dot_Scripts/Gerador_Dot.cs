@@ -133,9 +133,7 @@ public class Gerador_Dot : MonoBehaviour
         }
     }
 
-    void CreateMarbles(int qtd)
-    {
-        
+    void CreateMarbles(int qtd){
         for(int i=0;i<qtd;i++){  
             int valor = UnityEngine.Random.Range(1, 100);
             heap.AdicionarElementoHeap(valor);
