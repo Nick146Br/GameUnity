@@ -40,7 +40,7 @@ public class AnimationAndMovementController : MonoBehaviour
     [SerializeField]float maxJumpHeight = 4.0f;
     [SerializeField]float maxJumpTime = 0.6f;
     bool isJumping = false;
-    bool isSitting = false;
+    public bool isSitting = false;
     bool isJumpAnimating = false;
     bool allowSitting = false;
     bool allowStandUp = false;

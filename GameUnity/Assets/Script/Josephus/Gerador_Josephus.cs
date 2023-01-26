@@ -35,17 +35,21 @@ public class Gerador_Josephus : MonoBehaviour
 
     void Josephus(){
         Vector3 vec = new Vector3(20.0f, 0.0f, 0.0f);
+        Quaternion rotac = Quaternion.Euler(0f, 270f, 0f); 
         float angulo = 360.0f/(float)SizeOfCircle;
         for(int i = 1; i <= SizeOfCircle; i++){
             if(ChildThePlayerIs == i-1){
                 vec = Quaternion.Euler(0, angulo, 0) * vec;
+                rotac = Quaternion.Euler(0, angulo, 0) * rotac;
                 continue;
             }
-            GameObject DotClone = Instantiate(Enemy, vec, Quaternion.Euler(0, 0, 0));
+            GameObject DotClone = Instantiate(Enemy, vec, rotac);
             // Debug.Log(DotClone.transform.position.z);
             DotClone.GetComponent<AnimationAndMovementController>().animator.SetBool("isSitting", true);
+            DotClone.GetComponent<AnimationAndMovementController>().isSitting = true;
             DotClone.transform.parent = transform.GetChild(i-1);
             vec = Quaternion.Euler(0, angulo, 0) * vec;
+            rotac = Quaternion.Euler(0, angulo, 0) * rotac;
             // DotClone.SendMessage("getIndex", i,SendMessageOptions.DontRequireReceiver);
         }
         StartCoroutine(Coroutine());
