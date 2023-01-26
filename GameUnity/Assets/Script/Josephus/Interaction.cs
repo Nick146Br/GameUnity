@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Interaction : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class Interaction : MonoBehaviour
     [SerializeField] public Material DeactivateMaterial2;
     GameObject GOPlayer; 
     Material oldMaterial;
+    Color OriginalColor;
     // bool Dentro = false;
     bool sitHere = false;
     bool isInside = false;
@@ -36,7 +38,8 @@ public class Interaction : MonoBehaviour
     {
         MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
         oldMaterial = meshRenderer.material;
-
+        // Debug.Log( transform.parent.parent.gameObject);
+        OriginalColor = transform.parent.parent.GetChild(3).GetComponent<TextMeshPro>().color;
     }
 
     // Update is called once per frame
@@ -46,10 +49,18 @@ public class Interaction : MonoBehaviour
             MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
             if(sitHere){
                 meshRenderer.material = newMaterial2;
+                transform.parent.parent.GetChild(3).GetComponent<TextMeshPro>().color = new Color32(188, 7, 73, 255);
+                // transform.parent.parent.GetChild(3).GetComponent<TextMeshPro>().color = OriginalColor;
             }
             else{
-                if(!isInside) meshRenderer.material = oldMaterial;
-                else meshRenderer.material = newMaterial1;
+                if(!isInside) {
+                    meshRenderer.material = oldMaterial;
+                    transform.parent.parent.GetChild(3).GetComponent<TextMeshPro>().color = OriginalColor;
+                }
+                else {
+                    // meshRenderer.material = newMaterial1;
+                    transform.parent.parent.GetChild(3).GetComponent<TextMeshPro>().color = new Color32(188, 7, 73, 255);
+                }
             }
         }
 

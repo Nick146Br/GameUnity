@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Gerador_Josephus : MonoBehaviour
 {
@@ -72,7 +73,7 @@ public class Gerador_Josephus : MonoBehaviour
                 if(j == JosephusJump){
                     yield return new WaitForSeconds(1);
                     meshRenderer.material = PointColor;
-                    if(pos != ChildThePlayerIs) t.GetChild(3).GetComponent<AnimationAndMovementController>().animator.SetBool("isDead", true);
+                    if(pos != ChildThePlayerIs) t.GetChild(4).GetComponent<AnimationAndMovementController>().animator.SetBool("isDead", true);
                     else{
                         transform.GetChild(ChildThePlayerIs).GetChild(0).GetChild(1).gameObject.SendMessage("allowToStand", false, SendMessageOptions.DontRequireReceiver);
                         flagInterna = true;
@@ -95,16 +96,18 @@ public class Gerador_Josephus : MonoBehaviour
         
     }
     void Create(int num){
+        Quaternion rotac = Quaternion.Euler(0f, 90f, 0f); 
         float angulo = 360.0f/(float)num;
         // Debug.Log(transform.position.y);
         Vector3 vec = new Vector3(20.0f, 0.0f, 0.0f);
 
         for(int i = 1; i <= num; i++){
-            GameObject DotClone = Instantiate(Ponto, vec, Quaternion.Euler(0, 0, 0));
+            GameObject DotClone = Instantiate(Ponto, vec, rotac);
             // Debug.Log(DotClone.transform.position.z);
-
+            DotClone.transform.GetChild(3).GetComponent<TextMeshPro>().SetText(i.ToString());
             DotClone.transform.parent = transform;
             vec = Quaternion.Euler(0, angulo, 0) * vec;
+            rotac = Quaternion.Euler(0, angulo, 0) * rotac;
             // DotClone.SendMessage("getIndex", i,SendMessageOptions.DontRequireReceiver);
         }
     }
