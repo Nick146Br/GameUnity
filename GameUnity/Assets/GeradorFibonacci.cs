@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 
 public class GeradorFibonacci : MonoBehaviour
 {
@@ -22,11 +23,11 @@ public class GeradorFibonacci : MonoBehaviour
         // int num = SizeOfCircle;
         fib.Add(1); fib.Add(1);
         dic.Add(1, true);
-        for(int i = 2; i <= 20; i++){
+        for(int i = 2; i <= 60; i++){
             fib.Add(fib[i-1] + fib[i-2]);
             dic.Add(fib[i], true);
         }
-        int lin = UnityEngine.Random.Range(11, 12), col = UnityEngine.Random.Range(4, 7);
+        int lin = UnityEngine.Random.Range(15, 17), col = UnityEngine.Random.Range(6, 8);
 
         M = new List<List<int>> ();
 
@@ -54,7 +55,7 @@ public class GeradorFibonacci : MonoBehaviour
         // float angulo = 360.0f/(float)num;
         // // Debug.Log(transform.position.y);
         // Vector3 vec = new Vector3(20.0f, 0.0f, 0.0f);
-        float posx = 0.0f, posz = 0.0f, kx = 8.0f, kz = 8.0f, startz = -4.0f*(col + 1);
+        float posx = -12.0f, posz = 0.0f, kx = 8.0f, kz = 8.0f, startz = -4.0f*(col + 1);
         
         int aleat = UnityEngine.Random.Range(0, col);
         M[0][aleat] = 1;
@@ -66,11 +67,16 @@ public class GeradorFibonacci : MonoBehaviour
             if(aleat>col-1)aleat = col-1;
             M[i][aleat] = fib[i];
         }
-            
+        int ant;   
         for(int i = 0; i < lin; i++){
+            ant = fib[i];
             posz = 8.0f;
             for(int j = 0; j < col; j++){   
-                if(M[i][j] == -1)aleat = UnityEngine.Random.Range(2, 90);
+                if(M[i][j] == -1){
+                    do{
+                        aleat = UnityEngine.Random.Range(Math.Max(0,ant-4), ant+5);
+                    }while(aleat == ant);
+                }
                 else aleat = M[i][j];
                 GameObject newPlatform = Instantiate(PlatformType, new Vector3(posx + 32.0f, PlatformType.transform.position.y, posz + startz), PlatformType.transform.rotation);
                 newPlatform.transform.GetChild(0).GetComponent<TextMeshPro>().SetText(aleat.ToString());
