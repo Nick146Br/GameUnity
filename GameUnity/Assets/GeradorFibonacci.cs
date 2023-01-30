@@ -73,14 +73,12 @@ public class GeradorFibonacci : MonoBehaviour
             posz = 8.0f;
             for(int j = 0; j < col; j++){   
                 if(M[i][j] == -1){
-                    do{
-                        aleat = UnityEngine.Random.Range(Math.Max(0,ant-4), ant+5);
-                    }while(aleat == ant);
+                    aleat = UnityEngine.Random.Range(Math.Max(0,ant-4), ant+5);
                 }
                 else aleat = M[i][j];
                 GameObject newPlatform = Instantiate(PlatformType, new Vector3(posx + 32.0f, PlatformType.transform.position.y, posz + startz), PlatformType.transform.rotation);
                 newPlatform.transform.GetChild(0).GetComponent<TextMeshPro>().SetText(aleat.ToString());
-                newPlatform.transform.gameObject.SendMessage("SetNumero", (dic.ContainsKey(aleat)) ? true : false, SendMessageOptions.DontRequireReceiver);
+                newPlatform.transform.gameObject.SendMessage("SetNumero", (aleat == fib[i]) ? true : false, SendMessageOptions.DontRequireReceiver);
                 newPlatform.transform.parent = transform;
                 posz += kz;
             }

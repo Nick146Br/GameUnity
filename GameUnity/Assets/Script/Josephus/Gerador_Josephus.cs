@@ -73,7 +73,10 @@ public class Gerador_Josephus : MonoBehaviour
                 if(j == JosephusJump){
                     yield return new WaitForSeconds(1);
                     meshRenderer.material = PointColor;
-                    if(pos != ChildThePlayerIs) t.GetChild(4).GetComponent<AnimationAndMovementController>().animator.SetBool("isDead", true);
+                    if(pos != ChildThePlayerIs){
+                        t.GetChild(4).GetComponent<AnimationAndMovementController>().animator.SetBool("isDead", true);
+                        // t.GetChild(4).GetComponent<Collider>().animator.SetBool("isDead", true);
+                    }
                     else{
                         transform.GetChild(ChildThePlayerIs).GetChild(0).GetChild(1).gameObject.SendMessage("allowToStand", false, SendMessageOptions.DontRequireReceiver);
                         flagInterna = true;

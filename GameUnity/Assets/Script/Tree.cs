@@ -47,7 +47,7 @@ public class Tree : MonoBehaviour
             if(isCorrect) meshRenderer.material = CorrectMaterial;
             else meshRenderer.material = IncorrectMaterial;
         }
-        if(time == 70) numero = -1;  
+        if(time == 95) numero = -1;  
         time += 1;
 
         

@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 
 public class AnimationAndMovementController : MonoBehaviour
 {
+    // Collider Boneco
+    Vector3 Cboneco;
     //Variaveis de Referencia
     PlayerInput playerInput;
     CharacterController characterController;
@@ -34,6 +36,7 @@ public class AnimationAndMovementController : MonoBehaviour
 
     // Variaveis do Pulo
     bool isJumpPressed = false;
+    bool Colidiu = false;
     float initialJumpVelocity;
 
     [Header("Jump Parameters")]
@@ -100,7 +103,6 @@ public class AnimationAndMovementController : MonoBehaviour
         playerInput.CharacterControls.SitDown.started += onSit;
         playerInput.CharacterControls.SitDown.performed += onSit;
         playerInput.CharacterControls.SitDown.canceled += onSit;
-
 
         setupJumpVariables();
     }
@@ -260,21 +262,31 @@ public class AnimationAndMovementController : MonoBehaviour
 
     void PickupObject(GameObject pickObj){
         if(pickObj.GetComponent<Rigidbody>()){
+            pickObj.SendMessage("SendoSegurada", true, SendMessageOptions.DontRequireReceiver);
             heldObjRB = pickObj.GetComponent<Rigidbody>();
-           
-            heldObjRB.isKinematic = true;
+            Collider c = gameObject.GetComponent<Collider>();
+            // Debug.Log(c);
+            // c.transform.localScale
+            // c.size = c.size + new Vector3(0, 0, 2f);
+            // heldObjRB.isKinematic = true;
+            // heldObjRB.detectCollisions = true;
             heldObjRB.drag = 10;
             heldObjRB.transform.root.parent = holdArea;
+            // var filho = transform.Find("Ghost").GetChild(0).GetChild(0).transform.position;
+            // c.transform.position = filho;
             heldObj = pickObj;
         }
     }
     void DropObject(){
-        heldObjRB.isKinematic = false;
+        // heldObjRB.isKinematic = false;
+        // heldObjRB.detectCollisions = false;
         heldObjRB.drag = 1;
-     
+        // c = GetComponent<Collider>();
+        // c.size = Cboneco;
         Transform t = transform.Find("Ghost");
         t = t.GetChild(0);
-     
+        t.gameObject.SendMessage("SendoSegurada", false, SendMessageOptions.DontRequireReceiver);
+        Colidiu = false;
         t.parent = null;
         heldObj = null;
     }
@@ -331,7 +343,15 @@ public class AnimationAndMovementController : MonoBehaviour
                         }     
                     } 
                     else{
-                        MoveObject();
+                        
+                        Ray PickupRay = new Ray(PlayerCamera.transform.position, PlayerCamera.transform.forward);
+
+                        if(Colidiu && !Physics.Raycast(PickupRay, out RaycastHit hitInfo, 5f, PickupLayer)){
+                            // Vector3 moveDirection = (holdArea.position - hit.transform.gameObject.transform.position);
+                            // if(moveDirection.y <= 0.02f) 
+                            DropObject();
+                        } 
+                        else MoveObject();
                     }
                 }
                 else{
@@ -412,6 +432,9 @@ public class AnimationAndMovementController : MonoBehaviour
     void Death(bool flag){
         isDead = flag;
         // Debug.Log(isDead);
+    }
+    void Colisao(bool flag){
+        Colidiu = flag;
     }
 }
 
