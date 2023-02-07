@@ -12,12 +12,12 @@ public class Bola : MonoBehaviour
     }
 
     void OnCollisionEnter(Collision other) {
-        if(Segurada && other.gameObject.tag == "Wall"){
+        if(Segurada){
             transform.root.gameObject.SendMessage("Colisao", true, SendMessageOptions.DontRequireReceiver);
         }    
     }
     void OnCollisionExit(Collision other) {
-        if(Segurada && other.gameObject.tag == "Wall"){
+        if(Segurada){
             transform.root.gameObject.SendMessage("Colisao", false, SendMessageOptions.DontRequireReceiver);
         }
     }
