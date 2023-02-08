@@ -10,6 +10,7 @@ public class PauseControl : MonoBehaviour
     public GameObject PauseMenu;
     public GameObject GameOver;
     public GameObject Player;
+    public GameObject Accepted;
     // Start is called before the first frame update
     void Start()
     {
@@ -30,18 +31,33 @@ public class PauseControl : MonoBehaviour
             }
         }
         if(Player.GetComponent<AnimationAndMovementController>().isDead){
-            StartCoroutine(routine());
+            StartCoroutine(routineGameOver());
+        }
+        if(Player.GetComponent<AnimationAndMovementController>().isAccepted){
+            StartCoroutine(routineAccepted());
         }
     }
-    IEnumerator routine(){
+    IEnumerator routineGameOver(){
         yield return new WaitForSeconds(1);
         Time.timeScale = 0f;
         GameOver.SetActive(true);
+    }
+    IEnumerator routineAccepted(){
+        yield return new WaitForSeconds(1);
+        Time.timeScale = 0f;
+        Accepted.SetActive(true);
     }
     public void Resume(){
         PauseMenu.SetActive(false);
         Time.timeScale = 1f;
         GameIsPaused = false;
+    }
+    public void ReturnLobby(){
+        PauseMenu.SetActive(false);
+        Time.timeScale = 1f;
+        GameIsPaused = false;
+        Player.GetComponent<AnimationAndMovementController>().isAccepted = false;
+        SceneManager.LoadScene("Lobby");
     }
     void Pause(){
         PauseMenu.SetActive(true);
@@ -52,6 +68,7 @@ public class PauseControl : MonoBehaviour
     public void Restart(){
         GameOver.SetActive(false);
         Time.timeScale = 1f;
+        GameIsPaused = false;
         Player.GetComponent<AnimationAndMovementController>().isDead = false;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }

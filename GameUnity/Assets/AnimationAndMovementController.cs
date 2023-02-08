@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 
 public class AnimationAndMovementController : MonoBehaviour
 {
+    //Passou de fase;
+    public bool isAccepted = false;
     // Collider Boneco
     Vector3 Cboneco;
     //Variaveis de Referencia
