@@ -431,6 +431,9 @@ public class AnimationAndMovementController : MonoBehaviour
         allowStandUp = flag;
         // Debug.Log(flag);
     }
+    void CompleteTheLevel(bool flag){
+        isAccepted = flag;
+    }
     void Death(bool flag){
         isDead = flag;
         // Debug.Log(isDead);

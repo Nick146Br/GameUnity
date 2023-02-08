@@ -91,6 +91,12 @@ public class Interaction : MonoBehaviour
         if(!flag) GOPlayer.SendMessage("Death", true, SendMessageOptions.DontRequireReceiver);
         else GOPlayer.SendMessage("StandUp", true, SendMessageOptions.DontRequireReceiver);
     }
+
+    void Accepted(bool flag){
+        // Debug.Log(GOPlayer);
+        GOPlayer.SendMessage("CompleteTheLevel", flag, SendMessageOptions.DontRequireReceiver);
+        // else GOPlayer.SendMessage("StandUp", true, SendMessageOptions.DontRequireReceiver);
+    }
     void Deactivate(bool flag){
         isDeactivate = flag;
         MeshRenderer meshRenderer = GetComponent<MeshRenderer>();

@@ -6,6 +6,7 @@ using System;
 public class Gerador_Dot : MonoBehaviour
 {
     public GameObject DotOriginal;
+    public GameObject Player;
     public bool accepted = false;
     public GameObject SphereOriginal;
     public ArrayList tree_nodes = new ArrayList();
@@ -51,6 +52,7 @@ public class Gerador_Dot : MonoBehaviour
         accepted = child_1.GetComponent<Dot_Dad>().verifica_sub;                
         if(accepted==true){
             Debug.Log("Accepted!");
+            Player.GetComponent<AnimationAndMovementController>().isAccepted = true;
         }else{
             // Debug.Log("WA!");
         }

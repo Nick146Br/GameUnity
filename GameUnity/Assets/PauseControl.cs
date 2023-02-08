@@ -43,7 +43,7 @@ public class PauseControl : MonoBehaviour
         GameOver.SetActive(true);
     }
     IEnumerator routineAccepted(){
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(2);
         Time.timeScale = 0f;
         Accepted.SetActive(true);
     }

@@ -522,14 +522,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DotOriginal: {fileID: 7794459728107410278, guid: 47aa5d1fe45cbe74d9bdf1e694ecf334, type: 3}
+  Player: {fileID: 1990174541}
   accepted: 0
   SphereOriginal: {fileID: 4853537621709815983, guid: b6125d88854be2648bdd08897c31c46d, type: 3}
   razao: 0.5
   altura: 10
   InicioY: 10
   Largura: 28
-  MinimoDeBolas: 10
-  MaximoDeBolas: 15
+  MinimoDeBolas: 2
+  MaximoDeBolas: 5
 --- !u!4 &2060773930
 Transform:
   m_ObjectHideFlags: 0
@@ -647,7 +648,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 616620361429128728, guid: 873d328a5ed0efd4e8d5c9239eaaee4e, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.5569755
+      value: 0.55697554
       objectReference: {fileID: 0}
     - target: {fileID: 616620361429128728, guid: 873d328a5ed0efd4e8d5c9239eaaee4e, type: 3}
       propertyPath: m_LocalRotation.x
@@ -655,7 +656,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 616620361429128728, guid: 873d328a5ed0efd4e8d5c9239eaaee4e, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.00000003625024
+      value: -0.000000036250242
       objectReference: {fileID: 0}
     - target: {fileID: 616620361429128728, guid: 873d328a5ed0efd4e8d5c9239eaaee4e, type: 3}
       propertyPath: m_LocalRotation.z

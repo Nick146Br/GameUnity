@@ -201,7 +201,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "RUN TIME \n\nERROR"
+  m_text: 'WRONG
+
+    ANSWER'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 052fd9e3a4cd88747956c97e6eeda257, type: 2}
   m_sharedMaterial: {fileID: -479666649437769283, guid: 052fd9e3a4cd88747956c97e6eeda257, type: 2}
@@ -210,8 +212,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4292564264
-  m_fontColor: {r: 0.15686275, g: 0.33333334, b: 0.85882354, a: 1}
+    rgba: 4281204991
+  m_fontColor: {r: 1, g: 0, b: 0.1814251, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -240,7 +242,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: -21.62
   m_wordSpacing: -63.6
-  m_lineSpacing: 0
+  m_lineSpacing: 34.42
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -2288,7 +2290,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4280352523
-  m_fontColor: {r: 0.04150939, g: 1, b: 0.12681665, a: 1}
+  m_fontColor: {r: 0.9811321, g: 0.67058885, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

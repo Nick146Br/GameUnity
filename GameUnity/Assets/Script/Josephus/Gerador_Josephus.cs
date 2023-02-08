@@ -95,7 +95,10 @@ public class Gerador_Josephus : MonoBehaviour
             t.parent = null;
             tot--;
         }
-        if(!flagInterna)transform.GetChild(0).GetChild(0).GetChild(1).gameObject.SendMessage("allowToStand", true, SendMessageOptions.DontRequireReceiver);
+        if(!flagInterna){
+            transform.GetChild(0).GetChild(0).GetChild(1).gameObject.SendMessage("allowToStand", true, SendMessageOptions.DontRequireReceiver);
+            transform.GetChild(0).GetChild(0).GetChild(1).gameObject.SendMessage("Accepted", true, SendMessageOptions.DontRequireReceiver);
+        }
         
     }
     void Create(int num){

@@ -60,7 +60,7 @@ public class GeradorFibonacci : MonoBehaviour
         float posx = -12.0f, posz = 0.0f, kx = 8.0f, kz = 8.0f, startz = -4.0f*(col + 1);
         
         int aleat = UnityEngine.Random.Range(0, col);
-        M[0][aleat] = 1;
+        M[0][aleat] = 0;
         for(int i = 1; i < lin; i++){
             if(aleat == col-1) aleat = col-2;
             else if(aleat == 0) aleat = 1;
