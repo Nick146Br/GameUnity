@@ -21,13 +21,15 @@ public class GeradorFibonacci : MonoBehaviour
     // Start is called before the first frame update
     void Start(){
         // int num = SizeOfCircle;
-        fib.Add(1); fib.Add(1);
+        fib.Add(0); fib.Add(1); fib.Add(1);
+        dic.Add(0, true);
         dic.Add(1, true);
-        for(int i = 2; i <= 60; i++){
+        // dic.Add(1, true);
+        for(int i = 3; i <= 60; i++){
             fib.Add(fib[i-1] + fib[i-2]);
             dic.Add(fib[i], true);
         }
-        int lin = UnityEngine.Random.Range(15, 17), col = UnityEngine.Random.Range(6, 8);
+        int lin = UnityEngine.Random.Range(15, 18), col = UnityEngine.Random.Range(6, 8);
 
         M = new List<List<int>> ();
 
