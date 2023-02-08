@@ -53,6 +53,6 @@ public class PauseControl : MonoBehaviour
     }
     public void QuitGame(){
         Time.timeScale = 1f;
-        SceneManager.LoadScene("Menu");
+        SceneManager.LoadScene("Lobby");
     }
 }
