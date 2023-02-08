@@ -73,7 +73,7 @@ public class AnimationAndMovementController : MonoBehaviour
     private GameObject WhereIsInside;
 
     void Awake(){
-        
+        // Cursor.visible = false;
         playerInput = new PlayerInput();
         characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();

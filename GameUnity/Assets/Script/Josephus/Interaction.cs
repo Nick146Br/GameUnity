@@ -47,18 +47,25 @@ public class Interaction : MonoBehaviour
     {
         if(!isDeactivate){
             MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
+            
             if(sitHere){
                 meshRenderer.material = newMaterial2;
                 transform.parent.parent.GetChild(3).GetComponent<TextMeshPro>().color = new Color32(188, 7, 73, 255);
+                transform.parent.parent.Find("PressQ").gameObject.SendMessage("ShowQSit", false, SendMessageOptions.DontRequireReceiver);
                 // transform.parent.parent.GetChild(3).GetComponent<TextMeshPro>().color = OriginalColor;
             }
             else{
                 if(!isInside) {
                     meshRenderer.material = oldMaterial;
                     transform.parent.parent.GetChild(3).GetComponent<TextMeshPro>().color = OriginalColor;
+                    transform.parent.parent.Find("PressQ").gameObject.SendMessage("ShowQSit", false, SendMessageOptions.DontRequireReceiver);
                 }
                 else {
                     // meshRenderer.material = newMaterial1;
+                    if(!sitHere){
+                        Debug.Log(GOPlayer);
+                        transform.parent.parent.GetChild(4).gameObject.SendMessage("ShowQSit", true, SendMessageOptions.DontRequireReceiver);
+                    }
                     transform.parent.parent.GetChild(3).GetComponent<TextMeshPro>().color = new Color32(188, 7, 73, 255);
                 }
             }

@@ -19,21 +19,25 @@ public class Menu_Phases : MonoBehaviour
 
     public void TreePhase(){
         Time.timeScale = 1f;
+        // Cursor.visible = false;
         SceneManager.LoadScene("TreePhase");
     }
 
     public void FibonacciPhase(){
         Time.timeScale = 1f;
+        // Cursor.visible = false;
         SceneManager.LoadScene("FibonacciPhase");
     }
 
     public void JosephusPhase(){
         Time.timeScale = 1f;
+        // Cursor.visible = false;
         SceneManager.LoadScene("JosephusPhase");
     }
 
     public void QuitGame(){
         Time.timeScale = 1f;
+        // Cursor.visible = false;
         SceneManager.LoadScene("Menu");
     }
 }

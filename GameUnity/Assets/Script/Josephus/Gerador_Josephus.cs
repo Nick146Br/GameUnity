@@ -74,7 +74,7 @@ public class Gerador_Josephus : MonoBehaviour
                     yield return new WaitForSeconds(1);
                     meshRenderer.material = PointColor;
                     if(pos != ChildThePlayerIs){
-                        t.GetChild(4).GetComponent<AnimationAndMovementController>().animator.SetBool("isDead", true);
+                        t.Find("Enemy(Clone)").GetComponent<AnimationAndMovementController>().animator.SetBool("isDead", true);
                         // t.GetChild(4).GetComponent<Collider>().animator.SetBool("isDead", true);
                     }
                     else{
