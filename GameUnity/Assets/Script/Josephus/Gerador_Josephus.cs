@@ -107,7 +107,8 @@ public class Gerador_Josephus : MonoBehaviour
         for(int i = 1; i <= num; i++){
             GameObject DotClone = Instantiate(Ponto, vec, rotac);
             // Debug.Log(DotClone.transform.position.z);
-            DotClone.transform.GetChild(3).GetComponent<TextMeshPro>().SetText(i.ToString());
+            DotClone.transform.Find("Text (TMP)").GetComponent<TextMeshPro>().SetText(i.ToString());
+            DotClone.transform.Find("ShowText").gameObject.SendMessage("getNumber", i,SendMessageOptions.DontRequireReceiver);
             DotClone.transform.parent = transform;
             vec = Quaternion.Euler(0, angulo, 0) * vec;
             rotac = Quaternion.Euler(0, angulo, 0) * rotac;
