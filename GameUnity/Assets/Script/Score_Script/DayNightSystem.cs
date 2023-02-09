@@ -18,7 +18,7 @@ public class DayNightSystem : MonoBehaviour
     {
         rotationSpeed = 360 / dayLengthMinutes / 60;
         midday = dayLengthMinutes * 60 / 2;
-        // SingletonExample.Instance.Score_temp  =0;
+        SingletonExample.Instance.Score_temp  = 0;
 
     }   
 
@@ -31,8 +31,8 @@ public class DayNightSystem : MonoBehaviour
         float t = translateTime * 24f;
         float hours = Mathf.Floor(t);
         int total = 100;
-        // SingletonExample.Instance.Score_temp = Mathf.Max(SingletonExample.Instance.Score_temp, 0);
-        // timeText.text = "Score: " + SingletonExample.Instance.Score_temp.ToString();
+        SingletonExample.Instance.Score_temp = Mathf.Max(total-(int)hours, 0);
+        timeText.text = "Score: " + SingletonExample.Instance.Score_temp.ToString();
         transform.Rotate(new Vector3(1,0,0) * rotationSpeed * Time.deltaTime);
     }
 }

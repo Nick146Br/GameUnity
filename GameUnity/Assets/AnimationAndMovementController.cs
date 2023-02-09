@@ -327,14 +327,14 @@ public class AnimationAndMovementController : MonoBehaviour
         
 
         if(isAccepted){
-            // Scene scene = SceneManager.GetActiveScene();
-            // if(scene.name == "TreePhase"){
-            //     SingletonExample.Instance.Score_tree =  Mathf.Max(SingletonExample.Instance.Score_tree,SingletonExample.Instance.Score_temp);
-            // }else if(scene.name=="JosephusPhase"){
-            //     SingletonExample.Instance.Score_jos =   Mathf.Max(SingletonExample.Instance.Score_jos, SingletonExample.Instance.Score_temp);
-            // }else if(scene.name == "FibonacciPhase"){
-            //     SingletonExample.Instance.Score_fib =   Mathf.Max(SingletonExample.Instance.Score_fib,SingletonExample.Instance.Score_temp);
-            // }
+            Scene scene = SceneManager.GetActiveScene();
+            if(scene.name == "TreePhase"){
+                SingletonExample.Instance.Score_tree =  Mathf.Max(SingletonExample.Instance.Score_tree,SingletonExample.Instance.Score_temp);
+            }else if(scene.name=="JosephusPhase"){
+                SingletonExample.Instance.Score_jos =   Mathf.Max(SingletonExample.Instance.Score_jos, SingletonExample.Instance.Score_temp);
+            }else if(scene.name == "FibonacciPhase"){
+                SingletonExample.Instance.Score_fib =   Mathf.Max(SingletonExample.Instance.Score_fib,SingletonExample.Instance.Score_temp);
+            }
 
         }
         if(!isDead){
