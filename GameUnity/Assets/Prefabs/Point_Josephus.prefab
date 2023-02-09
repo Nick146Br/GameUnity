@@ -62,7 +62,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &3825670412166228614
 RectTransform:
   m_ObjectHideFlags: 0
@@ -411,7 +411,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 710.36914, y: -448.21732}
+  m_AnchoredPosition: {x: 678, y: -339.2}
   m_SizeDelta: {x: 339.2647, y: 93.5637}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5199719948864951910
@@ -446,14 +446,14 @@ MonoBehaviour:
 
     SIT DOWN'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 052fd9e3a4cd88747956c97e6eeda257, type: 2}
-  m_sharedMaterial: {fileID: -479666649437769283, guid: 052fd9e3a4cd88747956c97e6eeda257, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: e73a58f6e2794ae7b1b7e50b7fb811b0, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278518015
+    rgba: 4278218239
   m_fontColor: {r: 1, g: 0.42745098, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -483,7 +483,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 74.56
+  m_lineSpacing: 5.9
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -510,7 +510,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &6322098177305956582
