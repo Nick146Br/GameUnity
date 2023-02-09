@@ -13,7 +13,7 @@ public class AnimationAndMovementController : MonoBehaviour
     PlayerInput playerInput;
     CharacterController characterController;
     public Animator animator;
-    float spawnValue = 30f;
+    float spawnValue = 100f;
     int isWalkingHash;
     int isRunningHash;
     int isPushingHash;

@@ -35,6 +35,12 @@ public class Menu_Phases : MonoBehaviour
         SceneManager.LoadScene("JosephusPhase");
     }
 
+    public void Credits(){
+        Time.timeScale = 1f;
+        // Cursor.visible = false;
+        SceneManager.LoadScene("Credits");
+    }
+
     public void QuitGame(){
         Time.timeScale = 1f;
         // Cursor.visible = false;

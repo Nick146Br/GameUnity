@@ -6,7 +6,7 @@ public class Node_Follower_ : MonoBehaviour
 {
     public GameObject FloatingTextPrefab;
     private int valor = 0;
-    private float height = -0.5f;
+    private float height = 0f;
     private Vector3 target_position;
     // Start is called before the first frame update
     void Start()
