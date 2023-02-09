@@ -12,12 +12,13 @@ public class DayNightSystem : MonoBehaviour
     float translateTime;
     float midday;
     float ponto_fase = 100;
-    public int score_phase;
+    
     // Start is called before the first frame update
     void Start()
     {
         rotationSpeed = 360 / dayLengthMinutes / 60;
         midday = dayLengthMinutes * 60 / 2;
+        // SingletonExample.Instance.Score_temp  =0;
 
     }   
 
@@ -30,9 +31,8 @@ public class DayNightSystem : MonoBehaviour
         float t = translateTime * 24f;
         float hours = Mathf.Floor(t);
         int total = 100;
-        if(100 -(int)hours<=0) score_phase = 0;
-        else score_phase = 100-(int)hours;
-        timeText.text = hours.ToString() + "\n" + score_phase.ToString();
+        // SingletonExample.Instance.Score_temp = Mathf.Max(SingletonExample.Instance.Score_temp, 0);
+        // timeText.text = "Score: " + SingletonExample.Instance.Score_temp.ToString();
         transform.Rotate(new Vector3(1,0,0) * rotationSpeed * Time.deltaTime);
     }
 }

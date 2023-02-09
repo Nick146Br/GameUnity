@@ -19,7 +19,8 @@ public class SingletonExample : MonoBehaviour
             Object.Destroy(this);
     }
  
-    public int Score_1;
-    public int Score_2;
-    public int Score_3;
+    public int Score_tree;
+    public int Score_fib;
+    public int Score_jos;
+    public int Score_temp;
 }

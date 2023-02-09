@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class AnimationAndMovementController : MonoBehaviour
 {
@@ -322,6 +323,20 @@ public class AnimationAndMovementController : MonoBehaviour
     
     void Update()
     {
+        
+        
+
+        if(isAccepted){
+            // Scene scene = SceneManager.GetActiveScene();
+            // if(scene.name == "TreePhase"){
+            //     SingletonExample.Instance.Score_tree =  Mathf.Max(SingletonExample.Instance.Score_tree,SingletonExample.Instance.Score_temp);
+            // }else if(scene.name=="JosephusPhase"){
+            //     SingletonExample.Instance.Score_jos =   Mathf.Max(SingletonExample.Instance.Score_jos, SingletonExample.Instance.Score_temp);
+            // }else if(scene.name == "FibonacciPhase"){
+            //     SingletonExample.Instance.Score_fib =   Mathf.Max(SingletonExample.Instance.Score_fib,SingletonExample.Instance.Score_temp);
+            // }
+
+        }
         if(!isDead){
             if(contSit < limite)contSit++;
             if(contStand < limite)contStand++;
@@ -432,7 +447,9 @@ public class AnimationAndMovementController : MonoBehaviour
         // Debug.Log(flag);
     }
     void CompleteTheLevel(bool flag){
+        
         isAccepted = flag;
+
     }
     void Death(bool flag){
         isDead = flag;

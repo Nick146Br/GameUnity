@@ -14,7 +14,12 @@ public class Menu_Phases : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        // string saida = "Tree Score: " + (SingletonExample.Instance.Score_tree) + "\n"; 
+        // Debug.Log(saida);
+        // saida = "Fibonacci Score: " + (SingletonExample.Instance.Score_fib) + "\n"; 
+        // Debug.Log(saida);
+        // saida = "Josephus Score: " + (SingletonExample.Instance.Score_jos) + "\n";
+        // Debug.Log(saida);
     }
 
     public void TreePhase(){
