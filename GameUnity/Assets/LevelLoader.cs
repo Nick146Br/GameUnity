@@ -16,7 +16,7 @@ public class LevelLoader : MonoBehaviour
             LoadNextLevel();
         }
         if(Input.GetKeyDown(KeyCode.Escape)){
-            Application.Quit();
+            // Application.Quit();
         }
     }
 
